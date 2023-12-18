@@ -174,7 +174,7 @@
       <div class="col-4 pt-1">
       </div>
       <div class="col-4 text-center">
-        <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">Przywitaj swoją podróż</a>
+        <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">Loty Samolotem</a>
       </div>
       <div class="col-4 d-flex justify-content-end align-items-center">
         <a class="link-secondary" href="#" aria-label="Search">
@@ -187,10 +187,10 @@
 
   <div class="nav-scroller py-1 mb-3 border-bottom">
     <nav class="nav nav-underline justify-content-between">
-      <a class="nav-item nav-link link-body-emphasis active" href="index.html">Witaj</a>
+      <a class="nav-item nav-link link-body-emphasis" href="index.html">Witaj</a>
       <a class="nav-item nav-link link-body-emphasis" href="mapy.html">Mapy</a>
       <a class="nav-item nav-link link-body-emphasis" href="pociagi.html">Pociągi</a>
-      <a class="nav-item nav-link link-body-emphasis" href="Samoloty.html">Samoloty</a>
+      <a class="nav-item nav-link link-body-emphasis active" href="Samoloty.html">Samoloty</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Komunikacja miejska</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Taxi</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Hotele</a>
@@ -201,14 +201,57 @@
 </div>
 
 <main class="container">
-  <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="background-image: url('baner.jpg'); background-size: cover; background-position: center;">
-    <div class="col-lg-6 px-0" style=" color: #00CDFF ">
-      <h1 class="display-4 fst-italic">Ta aplikacja zaplanuje twoją podróż</h1>
-      <p class="lead my-3" style=" color: #ffffff "><b>Zaloguj się, aby odblokować dostęp do wszystkich przydatnych funkcji. Twoja przygoda z podróżowaniem zaczyna się teraz!</b></p>
-      <p class="lead mb-0" ><a href="#" class="text-body-emphasis fw-bold">Stwórz konto za darmo.</a></p>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="background-size: cover; background-position: center;">
+          <div class="col-lg-12">
+            <h1 class="display-6 fst-italic">Wyszukaj połączenie</h1>
+            <form>
+              <div class="form-group">
+                <label for="departureDate">Data wylotu:</label>
+                <input type="text" class="form-control" id="departureDate" placeholder="Podaj datę wylotu">
+              </div>
+              <div class="form-group">
+                <label for="returnDate">Data powrotu:</label>
+                <input type="text" class="form-control" id="returnDate" placeholder="Podaj datę powrotu">
+              </div>
+              <div class="form-group">
+                <label for="startStation">Stacja startowa:</label>
+                <input type="text" class="form-control" id="startStation" placeholder="Podaj stację startową">
+              </div>
+              <div class="form-group">
+                <label for="destination">Miejsce docelowe:</label>
+                <input type="text" class="form-control" id="destination" placeholder="Podaj miejsce docelowe">
+              </div>
+              <div class="form-group">
+                <label for="passengerCount">Ilość osób:</label>
+                <input type="number" class="form-control" id="passengerCount" placeholder="Podaj ilość osób">
+              </div>
+              <div class="form-group">
+                <label>Klasa podróży:</label>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" id="firstClass" name="travelClass" value="firstClass">
+                  <label class="form-check-label" for="firstClass">1 klasa</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" id="businessClass" name="travelClass" value="businessClass">
+                  <label class="form-check-label" for="businessClass">Klasa biznesowa</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" class="form-check-input" id="economyClass" name="travelClass" value="economyClass">
+                  <label class="form-check-label" for="economyClass">Klasa ekonomiczna</label>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary mt-3">Wyszukaj połączenia</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-
+  </div>       
+  
   <div class="row mb-2">
     <div class="col-md-6">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
