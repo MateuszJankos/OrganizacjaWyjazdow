@@ -206,51 +206,51 @@
       <div class="col-md-8 offset-md-2">
         <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="background-size: cover; background-position: center;">
           <div class="col-lg-12">
-            <h1 class="display-6 fst-italic">Wyszukaj połączenie</h1>
+            <h1 class="display-6 fst-italic">Kup bilet miejski / Wyszukaj trasę</h1>
             <form>
               <div class="form-group">
-                <label for="departureDate">Data wylotu:</label>
-                <input type="text" class="form-control" id="departureDate" placeholder="Podaj datę wylotu">
+                <label for="ticketType">Rodzaj biletu:</label>
+                <select class="form-control" id="ticketType">
+                  <option value="singleTicket">Bilet 20 minutowy</option>
+                  <option value="singleTicket">Bilet 75 minutowy</option>
+                  <option value="dailyPass">Bilet dzienny</option>
+                  <option value="monthlyPass">Karnet 3 dniowy</option>
+                </select>
               </div>
               <div class="form-group">
-                <label for="returnDate">Data powrotu:</label>
-                <input type="text" class="form-control" id="returnDate" placeholder="Podaj datę powrotu">
+                <label for="departureLocation">Miejsce rozpoczęcia podróży:</label>
+                <input type="text" class="form-control" id="departureLocation" placeholder="Podaj miejsce rozpoczęcia podróży">
               </div>
               <div class="form-group">
-                <label for="startStation">Stacja startowa:</label>
-                <input type="text" class="form-control" id="startStation" placeholder="Podaj stację startową">
+                <label for="destination">Cel podróży:</label>
+                <input type="text" class="form-control" id="destination" placeholder="Podaj cel podróży">
               </div>
               <div class="form-group">
-                <label for="destination">Miejsce docelowe:</label>
-                <input type="text" class="form-control" id="destination" placeholder="Podaj miejsce docelowe">
+                <label for="passengerCount">Ilość biletów:</label>
+                <input type="number" class="form-control" id="passengerCount" placeholder="Podaj ilość biletów">
               </div>
               <div class="form-group">
-                <label for="passengerCount">Ilość osób:</label>
-                <input type="number" class="form-control" id="passengerCount" placeholder="Podaj ilość osób">
+                <label for="Ticketvalue">Ulga:</label>
+                <select class="form-control" id="Ticketvalue">
+                  <option value="creditCard">Normalny</option>
+                  <option value="cash">Ulgowy 51%</option>
+                </select>
               </div>
               <div class="form-group">
-                <label>Klasa podróży:</label>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" id="firstClass" name="travelClass" value="firstClass">
-                  <label class="form-check-label" for="firstClass">1 klasa</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" id="businessClass" name="travelClass" value="businessClass">
-                  <label class="form-check-label" for="businessClass">Klasa biznesowa</label>
-                </div>
-                <div class="form-check">
-                  <input type="radio" class="form-check-input" id="economyClass" name="travelClass" value="economyClass">
-                  <label class="form-check-label" for="economyClass">Klasa ekonomiczna</label>
-                </div>
+                <label for="paymentMethod">Metoda płatności:</label>
+                <select class="form-control" id="paymentMethod">
+                  <option value="blik">Płatność Blik</option>
+                  <option value="creditCard">Karta kredytowa</option>
+                </select>
               </div>
-              <button type="submit" class="btn btn-primary mt-3">Wyszukaj połączenia</button>
+              <button type="submit" class="btn btn-primary mt-3">Kup bilet / Wyszukaj trasę</button>
             </form>
-            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>       
+  </div>
+      
   
   <div class="row mb-2">
     <div class="col-md-6">
