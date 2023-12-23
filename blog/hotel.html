@@ -174,7 +174,7 @@
       <div class="col-4 pt-1">
       </div>
       <div class="col-4 text-center">
-        <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">Taxi</a>
+        <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">Hotele</a>
       </div>
       <div class="col-4 d-flex justify-content-end align-items-center">
         <a class="link-secondary" href="#" aria-label="Search">
@@ -192,8 +192,8 @@
       <a class="nav-item nav-link link-body-emphasis" href="pociagi.html">Pociągi</a>
       <a class="nav-item nav-link link-body-emphasis" href="Samoloty.html">Samoloty</a>
       <a class="nav-item nav-link link-body-emphasis" href="kmiejska.html">Komunikacja miejska</a>
-      <a class="nav-item nav-link link-body-emphasis active" href="taxi.html">Taxi</a>
-      <a class="nav-item nav-link link-body-emphasis" href="hotel.html">Hotele</a>
+      <a class="nav-item nav-link link-body-emphasis" href="taxi.html">Taxi</a>
+      <a class="nav-item nav-link link-body-emphasis active" href="hotel.html">Hotele</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Atrakcje</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Tłumacz</a>
     </nav>
@@ -206,53 +206,41 @@
       <div class="col-md-8 offset-md-2">
         <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="background-size: cover; background-position: center;">
           <div class="col-lg-12">
-            <h1 class="display-6 fst-italic">Wybierz miasto:</h1>
-            <form id="searchForm">
+            <h1 class="display-6 fst-italic">Znajdź hotel</h1>
+            <form>
               <div class="form-group">
-                <input type="text" class="form-control" id="city" placeholder="Podaj miasto">
+                <label for="departureLocation">Miejsce: </label>
+                <input type="text" class="form-control" id="location" placeholder="Gdzie zamierzasz jechać?">
               </div>
-              <button type="button" class="btn btn-primary mt-3" onclick="search()">Wyszukaj</button>
+              <div class="form-group">
+                <label for="destination">Data zameldowania:</label>
+                <input type="date" class="form-control" id="firstday" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="passengerCount">Data Wymeldowania:</label>
+                <input type="date" class="form-control" id="lastday" placeholder="">
+              </div>
+              <div class="form-group">
+                <label for="passengerCount">Dorośli:</label>
+                <input type="number" class="form-control" id="adults" placeholder="1">
+              </div>
+              <div class="form-group">
+                <label for="passengerCount">Dzieci:</label>
+                <input type="number" class="form-control" id="kids" placeholder="0">
+              </div>
+              <div class="form-group">
+                <label for="passengerCount">Ilość pokoi:</label>
+                <input type="number" class="form-control" id="rooms" placeholder="1">
+              </div>
+              <button type="submit" class="btn btn-primary mt-3">Wyszukaj</button>
             </form>
-            <p id="phoneNumber" class="mt-3"></p>
           </div>
         </div>
       </div>
     </div>
   </div>
+      
   
-  <script>
-    function search() {
-      var cityInput = document.getElementById('city').value.toLowerCase();
-      var phoneNumberElement = document.getElementById('phoneNumber');
-  
-      // Reset phone number display
-      phoneNumberElement.textContent = "";
-  
-      // sprawdza miasto i wypisuje nr
-      if (cityInput === "warszawa") {
-        phoneNumberElement.textContent = "Tel.: 820-362-612,  508-707-235,  508-901-234 - Taxi Warszawa";
-      } else if (cityInput === "gdańsk") {
-        phoneNumberElement.textContent = "Tel.: 618-901-234,  513-505-789,  513-456-789 - Taxi Gdańsk";
-      } else if (cityInput === "radom") {
-        phoneNumberElement.textContent = "Tel.: 630-123-456,  519-212-345,  519-012-345 - Taxi Radom";
-      } else if (cityInput === "lublin") {
-        phoneNumberElement.textContent = "Tel.: 830-123-456,  528-999-234,  528-901-234 - Taxi Lublin";
-      } else if (cityInput === "szczecin") {
-        phoneNumberElement.textContent = "Tel.: 530-123-456,  521-228-567,  521-234-567 - Taxi Szczecin";
-      } else if (cityInput === "poznań") {
-        phoneNumberElement.textContent = "Tel.: 529-012-345,  525-678-901,  525-678-901 - Taxi Poznań";
-      } else if (cityInput === "łódź") {
-        phoneNumberElement.textContent = "Tel.: 509-012-345,  529-600-345,  529-012-345 - Taxi Łódź";
-      } else if (cityInput === "kraków") {
-        phoneNumberElement.textContent = "Tel.: 930-123-456,  530-444-456,  530-123-456 - Taxi Kraków";
-      } else if (cityInput === "wrocław") {
-        phoneNumberElement.textContent = "Tel.: 630-123-456,  511-605-567,  511-234-567 - Taxi Wrocław";
-      } else {
-        phoneNumberElement.textContent = "Tel.: 771-461-601,  507-890-123,  504-567-890 - Taxi Polska";
-      }
-    }
-  </script>
-
   <div class="row mb-2">
     <div class="col-md-6">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
