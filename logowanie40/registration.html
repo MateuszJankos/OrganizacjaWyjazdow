@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding-top: 50px;
+        }
+        .form-control {
+            border-radius: 20px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 24px;
+            font-size: 16px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #555;
+        }
+        .form-check-label {
+            color: #444;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .card {
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <h2>Register</h2>
+                <form action="register.php" method="POST">
+                    <div class="form-group mb-2">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="surname">Surname</label>
+                        <input type="text" name="surname" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="age">Age</label>
+                        <input type="number" name="age" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="confirm_password">Repeat Password</label>
+                        <input type="password" name="confirm_password" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3 form-check">
+                        <input type="checkbox" name="terms" class="form-check-input" id="acceptTerms" required>
+                        <label class="form-check-label" for="acceptTerms">Accept Terms & Conditions</label>
+                    </div>
+                    <button type="submit" name="register" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

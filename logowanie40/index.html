@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f8fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding-top: 50px;
+        }
+        .form-control {
+            border-radius: 20px;
+        }
+        .btn-primary {
+            background-color: #28a745;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 24px;
+            font-size: 16px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #555;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .card {
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card">
+                <h2>Login</h2>
+                <form action="login.php" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" name="login" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
