@@ -35,7 +35,9 @@ try {
         $stmt = $conn->prepare("INSERT INTO users (name, surname, age, password) VALUES (?, ?, ?, ?)");
         $stmt->execute([$name, $surname, $age, $hashedPass]);
 
-        echo "Registration successful.";
+        // After successful registration, redirect to index.html
+        header("index.html");
+        exit();
     }
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
