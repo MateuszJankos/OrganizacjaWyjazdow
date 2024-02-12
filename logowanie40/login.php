@@ -2,7 +2,7 @@
 session_start();
 // Database configuration
 $host = 'localhost';
-$dbname = 'my_app';
+$dbname = 'my_app_db';
 $username = 'root';
 $password = '';
 $dsn = "mysql:host=$host;dbname=$dbname";

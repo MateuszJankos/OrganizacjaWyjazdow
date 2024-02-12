@@ -1,9 +1,9 @@
 <?php
 // Database configuration
-$host = 'localhost'; // or your database host
-$dbname = 'your_database_name';
-$username = 'your_database_username';
-$password = 'your_database_password';
+$host = 'localhost';
+$dbname = 'my_app_db';
+$username = 'root';
+$password = '';
 $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
 
 try {
