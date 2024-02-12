@@ -5,7 +5,7 @@
   </head>
   <body>
   <section class="signup-form">
-    <h2>Sign Up</h2>
+    <h2>Rejestracja</h2>
     <form action="signup.inc.php" method="post">
         <input type="text" name="name" placeholder="Podaj swoje imie">
         <input type="text" name="email" placeholder="Podaj Email">
@@ -14,5 +14,6 @@
         <input type="password" name="pwdrepeat" placeholder="Powtorz hasło">
         <button type="submit" name="submit">Zarejestruj sie</button>
     </form>
+  </section>
   </body>
 </html>
