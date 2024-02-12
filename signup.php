@@ -6,7 +6,7 @@
   <body>
   <section class="signup-form">
     <h2>Rejestracja</h2>
-    <form action="signup.inc.php" method="post">
+    <form action="includes/singup.inc.php" method="post">
         <input type="text" name="name" placeholder="Podaj swoje imie">
         <input type="text" name="email" placeholder="Podaj Email">
         <input type="text" name="uid" placeholder="Nazwa użytkownika">
