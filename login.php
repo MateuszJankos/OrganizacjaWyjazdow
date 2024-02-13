@@ -11,6 +11,16 @@
         <input type="password" name="pwd" placeholder="Haslo">
         <button type="submit" name="submit">Zaloguj sie</button>
     </form>
+    <?php
+  if (isset($_GET["error"])) {
+    if ($_GET["error"] == "emptyinput") {
+      echo "<p>Wypełnij wszystkie pola!</p>";
+    }
+    else if ($_GET["error"] == "wronglogin") {
+      echo "<p>Niepoprawny Dane!</p>";
+    }
+    }
+    ?>
   </section>
   </body>
 </html>
