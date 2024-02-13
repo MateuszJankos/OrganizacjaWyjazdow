@@ -1,5 +1,5 @@
 <?php
-
+//sprawdzanie czy pola nie są puste
 function emptyInputSignup($name, $email, $username, $pwd, $pwdRepeat) {
     $result;
     if (empty($name) || empty($email) || empty($username) || empty($pwd) || empty($pwdRepeat)) {
@@ -10,7 +10,7 @@ function emptyInputSignup($name, $email, $username, $pwd, $pwdRepeat) {
     }
     return $result;
 }
-
+//sprawdzanie czy nazwa posiada małą, dużą literę i cyfrę
 function invalidUid($username) {
     $result;
     if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
@@ -21,7 +21,7 @@ function invalidUid($username) {
     }
     return $result;
 }
-
+// sprawdzanie czy Email jest poprawny
 function invalidEmail($email) {
     $result;
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -32,7 +32,7 @@ function invalidEmail($email) {
     }
     return $result;
 }
-
+//sprawdzanie czy hasło i powrtórzone hasło są identyczne
 function pwdMatch($pwd, $pwdRepeat) {
     $result;
     if ($pwd !== $pwdRepeat) {
@@ -43,7 +43,7 @@ function pwdMatch($pwd, $pwdRepeat) {
     }
     return $result;
 }
-
+// sprawdzanie czy nazwa użytkownika nie jest zajęta
 function uidExists($conn, $username, $email) {
     $sql = "SELECT * FROM users WHERE usersUid = ? OR usersEmail = ?;";
     $stmt = mysqli_stmt_init($conn);
@@ -67,7 +67,7 @@ function uidExists($conn, $username, $email) {
 
     mysqli_stmt_close($stmt);
 }
-
+// dodawanie nowego użytkownika do bazy danych
 function createUser($conn, $name, $email, $username, $pwd) {
     $sql = "INSERT INTO users (usersName, usersEmail, usersUid, usersPwd) VALUES (?, ?, ?, ?);";
     $stmt = mysqli_stmt_init($conn);
