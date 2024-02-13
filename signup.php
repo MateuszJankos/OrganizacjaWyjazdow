@@ -14,6 +14,34 @@
         <input type="password" name="pwdrepeat" placeholder="Powtorz hasło">
         <button type="submit" name="submit">Zarejestruj sie</button>
     </form>
+    <?php
+  if (isset($_GET["error"])) {
+    if ($_GET["error"] == "emptyinput") {
+      echo "<p>Wypełnij wszystkie pola!</p>";
+    }
+    else if ($_GET["error"] == "invalidUid") {
+      echo "<p>Wybierz poprawną nazwę użytkownika!</p>";
+    }
+    else if ($_GET["error"] == "invalidemail") {
+      echo "<p>Podaj poprawny Email!</p>";
+    }
+    else if ($_GET["error"] == "passwordsdontmatch") {
+      echo "<p>Hasła są różne!</p>";
+    }
+    else if ($_GET["error"] == "usernametaken") {
+      echo "<p>Nazwa użytkownika już jest zajęta!</p>";
+    }
+    else if ($_GET["error"] == "stmtFAIL") {
+      echo "<p>Brak połączenia z Bazą danych!</p>";
+    }
+    else if ($_GET["error"] == "CreationFail") {
+      echo "<p>Nie można utworzyć nowego konta!</p>";
+    }
+    else if ($_GET["error"] == "none") {
+      echo "<p>Udało ci się stworzyć konto!</p>";
+    }
+    }
+    ?>
   </section>
   </body>
 </html>
