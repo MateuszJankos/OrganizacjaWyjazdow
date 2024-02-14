@@ -109,10 +109,11 @@
       <a class="nav-item nav-link link-body-emphasis" href="pociagi.php">Pociągi</a>
       <a class="nav-item nav-link link-body-emphasis" href="Samoloty.php">Samoloty</a>
       <a class="nav-item nav-link link-body-emphasis" href="kmiejska.php">Komunikacja miejska</a>
-      <a class="nav-item nav-link disabled" aria-disabled="true" href="taxi.php">Taxi</a>
-      <a class="nav-item nav-link disabled" aria-disabled="true" href="hotel.php">Hotele</a>
-      <a class="nav-item nav-link disabled" aria-disabled="true" href="atrakcje.php">Atrakcje</a>
-      <a class="nav-item nav-link disabled" aria-disabled="true" href="tłumacz.php">Tłumacz</a>
+      <a class="nav-item nav-link link-body-emphasis" href="taxi.php">Taxi</a>
+      <a class="nav-item nav-link link-body-emphasis" href="hotel.php">Hotele</a>
+      <a class="nav-item nav-link link-body-emphasis" href="atrakcje.php">Atrakcje</a>
+      <a class="nav-item nav-link link-body-emphasis" href="tłumacz.php">Tłumacz</a>
+      <a class="nav-item nav-link disabled" aria-disabled="true" href="tłumacz.php">Disabled</a>
     </nav>
   </div>
 </div>
