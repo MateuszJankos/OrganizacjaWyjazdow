@@ -7,7 +7,7 @@
     <div class="col-lg-6 px-0" style=" color: #00CDFF ">
       <h1 class="display-4 fst-italic">Ta aplikacja zaplanuje twoją podróż</h1>
       <p class="lead my-3" style=" color: #ffffff "><b>Zaloguj się, aby odblokować dostęp do wszystkich przydatnych funkcji. Twoja przygoda z podróżowaniem zaczyna się teraz!</b></p>
-      <p class="lead mb-0" ><a href="#" class="text-body-emphasis fw-bold">Stwórz konto za darmo.</a></p>
+      <p class="lead mb-0" ><a href="../signup.php" class="text-body-emphasis fw-bold">Stwórz konto za darmo.</a></p>
     </div>
   </div>
 
