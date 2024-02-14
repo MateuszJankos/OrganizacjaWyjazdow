@@ -3,6 +3,11 @@
 ?>
 
 <main class="container">
+  <?php 
+  if (isset($_SESSION["useruid"])) {
+    echo "<p>Witaj na stronie " . $_SESSION["useruid"] . "</p>";
+  }
+  ?>
   <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="background-image: url('baner.jpg'); background-size: cover; background-position: center;">
     <div class="col-lg-6 px-0" style=" color: #00CDFF ">
       <h1 class="display-4 fst-italic">Ta aplikacja zaplanuje twoją podróż</h1>

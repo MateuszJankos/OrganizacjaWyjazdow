@@ -103,11 +103,12 @@
         </a>
         <?php
         if (isset($_SESSION["useruid"])) {
+        echo "<a class='btn btn-sm btn-outline-secondary' href='../includes/logout.inc.php'>Wyloguj się</a>";
         echo "<a class='btn btn-sm btn-outline-secondary' href='../signup.php'>Profil podróżnika</a>";
         }
         else {
         echo "<a class='btn btn-sm btn-outline-secondary' href='../signup.php'>Stwórz konto!</a>";
-        echo "<a class='btn btn-sm btn-outline-secondary' href=''../login.php'>Zaloguj się</a>";
+        echo "<a class='btn btn-sm btn-outline-secondary' href='../login.php'>Zaloguj się</a>";
         }
         ?>
       </div>
