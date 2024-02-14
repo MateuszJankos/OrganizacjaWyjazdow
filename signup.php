@@ -39,6 +39,7 @@
     }
     else if ($_GET["error"] == "none") {
       echo "<p>Udało ci się stworzyć konto!</p>";
+      echo "<a href='login.php'>Zaloguj sie</a>";
     }
     }
     ?>

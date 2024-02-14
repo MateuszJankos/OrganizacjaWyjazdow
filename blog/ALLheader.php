@@ -1,3 +1,7 @@
+<?php 
+  session_start();
+?>
+
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
   <head><script src="../assets/js/color-modes.js"></script>
@@ -97,8 +101,15 @@
         <a class="link-secondary" href="#" aria-label="Search">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
         </a>
-        <a class="btn btn-sm btn-outline-secondary" href="../signup.php">Stwórz konto!</a>
-        <a class="btn btn-sm btn-outline-secondary" href="../login.php">Zaloguj się</a>
+        <?php
+        if (isset($_SESSION["useruid"])) {
+        echo "<a class='btn btn-sm btn-outline-secondary' href='../signup.php'>Profil podróżnika</a>";
+        }
+        else {
+        echo "<a class='btn btn-sm btn-outline-secondary' href='../signup.php'>Stwórz konto!</a>";
+        echo "<a class='btn btn-sm btn-outline-secondary' href=''../login.php'>Zaloguj się</a>";
+        }
+        ?>
       </div>
     </div>
   </header>
@@ -107,14 +118,21 @@
     <nav class="nav nav-underline justify-content-between">
       <a class="nav-item nav-link link-body-emphasis" href="index.php">Witaj</a>
       <a class="nav-item nav-link link-body-emphasis" href="mapy.php">Mapy</a>
-      <a class="nav-item nav-link link-body-emphasis" href="pociagi.php">Pociągi</a>
-      <a class="nav-item nav-link link-body-emphasis" href="Samoloty.php">Samoloty</a>
-      <a class="nav-item nav-link link-body-emphasis" href="kmiejska.php">Komunikacja miejska</a>
-      <a class="nav-item nav-link link-body-emphasis" href="taxi.php">Taxi</a>
-      <a class="nav-item nav-link link-body-emphasis" href="hotel.php">Hotele</a>
-      <a class="nav-item nav-link link-body-emphasis" href="atrakcje.php">Atrakcje</a>
-      <a class="nav-item nav-link link-body-emphasis" href="tłumacz.php">Tłumacz</a>
-      <a class="nav-item nav-link disabled" aria-disabled="true" href="tłumacz.php">Disabled</a>
+      <?php
+        if (isset($_SESSION["useruid"])) {
+          echo "<a class='nav-item nav-link link-body-emphasis' href='pociagi.php'>Pociągi</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='Samoloty.php'>Samoloty</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='kmiejska.php'>Komunikacja miejska</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='taxi.php'>Taxi</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='hotel.php'>Hotele</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='atrakcje.php'>Atrakcje</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='tłumacz.php'>Tłumacz</a>";
+          echo "<a class='nav-item nav-link disabled' aria-disabled='true' href='tłumacz.php'>Disabled</a>";
+        }
+        else {
+          echo "<p>Zaloguj się na konto, aby odblokować pozostałe funkcję</p>";
+        }
+      ?>
     </nav>
   </div>
 </div>
