@@ -10,7 +10,13 @@
             <p>Opisa osoby która posiada ten profil. Tutaj możesz dodać więcej szczegółów o sobie, swoich zainteresowaniach czy doświadczeniu.</p>
         </div>
         <div class="col-md-8">
-            <h3>Cześć, jestem [Nazwa]</h3>
+            <h3>Cześć, jestem 
+                <?php 
+                if (isset($_SESSION["useruid"])) {
+                    echo $_SESSION["useruid"];
+                }
+                ?>
+            </h3>
             <p>Kolejny opis mówiący o ulubionych wycieczkach osoby. Możesz tutaj wymienić miejsca, które odwiedziłeś/aś i dlaczego są one dla Ciebie ważne.</p>
             
             <h4>Ulubione wycieczki</h4>
