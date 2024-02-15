@@ -9,8 +9,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.118.2">
     <title>Starting Page 1</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/blog/">
@@ -104,7 +102,7 @@
         <?php
         if (isset($_SESSION["useruid"])) {
         echo "<a class='btn btn-sm btn-outline-secondary' href='../includes/logout.inc.php'>Wyloguj się</a>";
-        echo "<a class='btn btn-sm btn-outline-secondary' href='../signup.php'>Profil podróżnika</a>";
+        echo "<a class='btn btn-sm btn-outline-secondary' href='profile.php'>Profil podróżnika</a>";
         }
         else {
         echo "<a class='btn btn-sm btn-outline-secondary' href='../signup.php'>Stwórz konto!</a>";
