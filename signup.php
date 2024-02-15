@@ -19,7 +19,7 @@
     if ($_GET["error"] == "emptyinput") {
       echo "<p>Wypełnij wszystkie pola!</p>";
     }
-    else if ($_GET["error"] == "invalidUid") {
+    else if ($_GET["error"] == "invaliduid") {
       echo "<p>Wybierz poprawną nazwę użytkownika!</p>";
     }
     else if ($_GET["error"] == "invalidemail") {

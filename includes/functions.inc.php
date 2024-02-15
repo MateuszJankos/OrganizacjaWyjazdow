@@ -1,7 +1,6 @@
 <?php
 //sprawdzanie czy pola nie są puste
 function emptyInputSignup($name, $email, $username, $pwd, $pwdRepeat) {
-    $result;
     if (empty($name) || empty($email) || empty($username) || empty($pwd) || empty($pwdRepeat)) {
         $result = true;
     }
@@ -12,7 +11,6 @@ function emptyInputSignup($name, $email, $username, $pwd, $pwdRepeat) {
 }
 //sprawdzanie czy nazwa posiada małą, dużą literę i cyfrę
 function invalidUid($username) {
-    $result;
     if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
         $result = true;
     }
@@ -23,7 +21,6 @@ function invalidUid($username) {
 }
 // sprawdzanie czy Email jest poprawny
 function invalidEmail($email) {
-    $result;
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $result = true;
     }
@@ -34,7 +31,6 @@ function invalidEmail($email) {
 }
 //sprawdzanie czy hasło i powrtórzone hasło są identyczne
 function pwdMatch($pwd, $pwdRepeat) {
-    $result;
     if ($pwd !== $pwdRepeat) {
         $result = true;
     }
@@ -86,7 +82,6 @@ function createUser($conn, $name, $email, $username, $pwd) {
 }
 // sprawdzanie czy pola logowania są puste
 function emptyInputLogin($username, $pwd) {
-    $result;
     if (empty($username) || empty($pwd)) {
         $result = true;
     }
