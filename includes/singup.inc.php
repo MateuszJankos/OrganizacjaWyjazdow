@@ -1,7 +1,7 @@
 <?php
-//co sie dzieje jak użytkownik kliknie zarejestruj sie
+// Sprawdzanie, czy formularz został wysłany
 if (isset($_POST["submit"])) {
-    
+ // Pobiera dane wprowadzone przez użytkownika w formularzu rejestracyjnym   
     $name = $_POST["name"];
     $email = $_POST["email"];
     $username = $_POST["uid"];
@@ -31,11 +31,11 @@ if (isset($_POST["submit"])) {
         header("location: ../signup.php?error=usernametaken");
         exit();
     }
-
+ // Jeśli wszystkie powyższe warunki są spełnione, użytkownik jest rejestrowany w systemie
     createUser($conn, $name, $email, $username, $pwd);
 
 }
-else {
+else {  // Jeśli formularz nie został wysłany, użytkownik jest przekierowywany do strony rejestracji
     header("location: ../signup.php");
     exit();
 }
