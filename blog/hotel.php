@@ -67,33 +67,33 @@ if ($result && $result->num_rows > 0) {
     // Przycisk "Dodaj do ulubionych"
     echo '<td>';
     if (isset($_SESSION["userid"])) {
-      $userId = $_SESSION["userid"];
-      // Sprawdź, czy hotel jest już dodany do ulubionych
-      $profilQuery = "SELECT profilUluhotel FROM profil WHERE usersId = ?";
-      $profilStmt = mysqli_stmt_init($conn);
-      if (mysqli_stmt_prepare($profilStmt, $profilQuery)) {
-          mysqli_stmt_bind_param($profilStmt, "i", $userId);
-          mysqli_stmt_execute($profilStmt);
-          $resultProfil = mysqli_stmt_get_result($profilStmt);
-          $profil = mysqli_fetch_assoc($resultProfil);
-          $currentFavorites = $profil['profilUluhotel'] ? explode(',', $profil['profilUluhotel']) : [];
-          
-          if (!in_array($row["hotelId"], $currentFavorites)) {
-              // Jeśli hotel nie jest jeszcze w ulubionych, dodaj przycisk umożliwiający dodanie
-              echo '<form action="add_to_favorites.php" method="post">';
-              echo '<input type="hidden" name="hotelId" value="' . $row["hotelId"] . '">';
-              echo '<button type="submit" name="addFavorite" class="btn btn-primary btn-sm">Dodaj do ulubionych</button>';
-              echo '</form>';
-          } else {
-              // Jeśli hotel jest już w ulubionych, dodaj przycisk umożliwiający usunięcie
-              echo '<form action="remove_from_favorites.php" method="post" style="display: inline-block;">';
-              echo '<input type="hidden" name="hotelId" value="' . $row["hotelId"] . '">';
-              echo '<button type="submit" name="removeFavorite" class="btn btn-danger btn-sm">Usuń z ulubionych</button>';
-              echo '</form>';
-          }
-      }
+    $userId = $_SESSION["userid"];
+    // Sprawdź, czy hotel jest już dodany do ulubionych
+    $profilQuery = "SELECT profilUluhotel FROM profil WHERE usersId = ?";
+    $profilStmt = mysqli_stmt_init($conn);
+    if (mysqli_stmt_prepare($profilStmt, $profilQuery)) {
+        mysqli_stmt_bind_param($profilStmt, "i", $userId);
+        mysqli_stmt_execute($profilStmt);
+        $resultProfil = mysqli_stmt_get_result($profilStmt);
+        $profil = mysqli_fetch_assoc($resultProfil);
+        $currentFavorites = $profil['profilUluhotel'] ? explode(',', $profil['profilUluhotel']) : [];
+        
+        if (!in_array($row["hotelId"], $currentFavorites)) {
+            // Jeśli hotel nie jest jeszcze w ulubionych, dodaj przycisk umożliwiający dodanie
+            echo '<form action="add_to_favorites.php" method="post">';
+            echo '<input type="hidden" name="hotelId" value="' . $row["hotelId"] . '">';
+            echo '<button type="submit" name="addFavorite" class="btn btn-primary btn-sm">Dodaj do ulubionych</button>';
+            echo '</form>';
+        } else {
+            // Jeśli hotel jest już w ulubionych, dodaj przycisk umożliwiający usunięcie
+            echo '<form action="remove_from_favorites.php" method="post" style="display: inline-block;">';
+            echo '<input type="hidden" name="hotelId" value="' . $row["hotelId"] . '">';
+            echo '<button type="submit" name="removeFavorite" class="btn btn-danger btn-sm">Usuń z ulubionych</button>';
+            echo '</form>';
+        }
     }
-    else {
+}
+ else {
         echo 'Zaloguj się, aby dodać do ulubionych.';
     }
     echo '</td>';

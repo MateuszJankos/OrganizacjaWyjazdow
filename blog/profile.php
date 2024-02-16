@@ -54,7 +54,7 @@ if (isset($_SESSION["userid"])) {
             <p>Tutaj możesz dodać więcej informacji o swoich ulubionych miejscach i wycieczkach.</p>
 
             <!-- Sekcja ulubionych hoteli -->
-            <h4>Ulubione hotele</h4>
+            <h4>Ulubiony hotel</h4>
     <ul class="list-group mb-3">
         <?php
         foreach ($ulubioneHoteleIds as $hotelId) {
@@ -78,7 +78,7 @@ if (isset($_SESSION["userid"])) {
         ?>
     </ul>
 
-    <h4>Ulubione atrakcje</h4>
+    <h4>Ulubiona atrakcja</h4>
     <ul class="list-group">
         <?php
         foreach ($ulubioneAtrakcjeIds as $atraId) {

@@ -45,14 +45,17 @@ echo '<div class="container mt-5">';
 echo '</div>';
 
 // Sprawdzenie wyników i wyświetlenie tabeli
+// Sprawdzenie wyników i wyświetlenie tabeli
 if ($result && $result->num_rows > 0) {
     echo '<table class="table table-striped table-hover">';
     echo '<thead class="thead-dark">';
     echo '<tr>';
+    // Nagłówki tabeli z linkami do sortowania
     echo '<th><a href="?sort=atraMiasto&order=' . ($sortColumn == 'atraMiasto' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Miasto</a></th>';
     echo '<th><a href="?sort=atraNazwa&order=' . ($sortColumn == 'atraNazwa' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Nazwa</a></th>';
     echo '<th>Opis</th>'; // Opis nie jest sortowalny
     echo '<th><a href="?sort=atraOcena&order=' . ($sortColumn == 'atraOcena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Ocena</a></th>';
+    echo '<th>Działanie</th>';
     echo '</tr>';
     echo '</thead>';
     echo '<tbody>';
@@ -62,12 +65,48 @@ if ($result && $result->num_rows > 0) {
         echo '<td>' . htmlspecialchars($row["atraNazwa"]) . '</td>';
         echo '<td>' . htmlspecialchars($row["atraOpis"]) . '</td>';
         echo '<td>' . htmlspecialchars($row["atraOcena"]) . '</td>';
+        // Dodanie przycisków "Dodaj do ulubionych" lub "Usuń z ulubionych"
+        echo '<td>';
+        if (isset($_SESSION["userid"])) {
+            $userId = $_SESSION["userid"];
+            // Sprawdź, czy atrakcja jest już dodana do ulubionych
+            $profilQuery = "SELECT profilUluatra FROM profil WHERE usersId = ?";
+            $profilStmt = mysqli_stmt_init($conn);
+            if (mysqli_stmt_prepare($profilStmt, $profilQuery)) {
+                mysqli_stmt_bind_param($profilStmt, "i", $userId);
+                mysqli_stmt_execute($profilStmt);
+                $resultProfil = mysqli_stmt_get_result($profilStmt);
+                if ($profil = mysqli_fetch_assoc($resultProfil)) {
+                    $currentFavorites = $profil['profilUluatra'] ? explode(',', $profil['profilUluatra']) : [];
+                    if (!in_array($row["atraId"], $currentFavorites)) {
+                        // Jeśli atrakcja nie jest jeszcze w ulubionych, dodaj przycisk umożliwiający dodanie
+                        echo '<form action="add_to_favorites_atrakcje.php" method="post">';
+                        echo '<input type="hidden" name="atraId" value="' . $row["atraId"] . '">';
+                        echo '<button type="submit" name="addFavoriteAtrakcja" class="btn btn-primary btn-sm">Dodaj do ulubionych</button>';
+                        echo '</form>';
+                    } else {
+                        // Jeśli atrakcja jest już w ulubionych, dodaj przycisk umożliwiający usunięcie
+                        echo '<form action="remove_from_favorites_atrakcje.php" method="post">';
+                        echo '<input type="hidden" name="atraId" value="' . $row["atraId"] . '">';
+                        echo '<button type="submit" name="removeFavoriteAtrakcja" class="btn btn-danger btn-sm">Usuń z ulubionych</button>';
+                        echo '</form>';
+                    }
+                } else {
+                    echo 'Błąd podczas pobierania informacji o ulubionych atrakcjach.';
+                }
+            } else {
+                echo 'Błąd zapytania SQL.';
+            }
+        } else {
+            echo 'Zaloguj się, aby dodać do ulubionych.';
+        }
+        echo '</td>';
         echo '</tr>';
     }
-    echo '</tbody>';
-    echo '</table>';
+echo '</tbody>';
+echo '</table>';
 } else {
-    echo "Nie znaleziono atrakcji.";
+echo "Nie znaleziono atrakcji.";
 }
 ?>
 
