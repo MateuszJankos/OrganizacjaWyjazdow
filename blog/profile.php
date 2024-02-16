@@ -1,4 +1,4 @@
-<?php 
+<?php
 include_once 'ALLheader.php';
 require_once '../includes/dbh.inc.php';
 
@@ -29,30 +29,60 @@ if (isset($_SESSION["userid"])) {
         mysqli_stmt_bind_param($insertProfilStmt, "i", $userid);
         mysqli_stmt_execute($insertProfilStmt);
         
-        // Pobierz nowo utworzony profil
+        // Ponownie pobierz profil po utworzeniu
+        mysqli_stmt_prepare($profilStmt, $profilQuery);
+        mysqli_stmt_bind_param($profilStmt, "i", $userid);
         mysqli_stmt_execute($profilStmt);
         $profilResult = mysqli_stmt_get_result($profilStmt);
         $profil = mysqli_fetch_assoc($profilResult);
     }
     
+    $profilOpis = $profil['profilOpis'] ?? "Tu pojawi się twój opis."; // Zaktualizowano o poprawne pobieranie opisu
+
     // Pobranie ulubionych hoteli i atrakcji
     $ulubioneHoteleIds = explode(',', $profil['profilUluhotel']);
     $ulubioneAtrakcjeIds = explode(',', $profil['profilUluatra']);
 ?>
-
 <main class="container mt-5">
     <!-- Zawartość profilu -->
     <div class="row">
-        <div class="col-md-4">
-            <!-- Sekcja informacji o użytkowniku -->
-            <img src="profilowe.png" alt="Zdjęcie profilowe" class="img-fluid mb-3">
-            <h3>O MNIE</h3>
-            <p><?php if (isset($profilOpis)) { echo htmlspecialchars($profilOpis); } else { echo "Tu pojawi się twój opis."; } ?></p>
+    <div class="col-md-4">
+    <!-- Sekcja informacji o użytkowniku -->
+    <img src="profilowe.png" alt="Zdjęcie profilowe" class="img-fluid mb-3">
+</div>
+<div class="col-md-8">
+    <h3>Cześć, jestem <?php echo isset($_SESSION["useruid"]) ? htmlspecialchars($_SESSION["useruid"]) : ''; ?></h3>
+    <p>Tutaj można znaleźć więcej informacji o mnie i moich ulubionych miejscach!</p>
+    <h4>O MNIE</h4>
+    <p><?php echo $profilOpis; ?></p>
+    <!-- Przycisk do pokazania formularza -->
+    <button id="editDescriptionBtn" class="btn btn-primary">Zaktualizuj opis</button>
+    <!-- Formularz do zmiany opisu, domyślnie ukryty -->
+    <form action="update_profile_description.php" method="post" id="editDescriptionForm" style="display: none;">
+        <div class="form-group">
+            <textarea name="profileDescription" class="form-control" rows="4"><?php echo $profilOpis; ?></textarea>
         </div>
-        <div class="col-md-8">
-            <h3>Cześć, jestem <?php if (isset($_SESSION["useruid"])) { echo htmlspecialchars($_SESSION["useruid"]); } ?></h3>
-            <p>Tutaj możesz dodać więcej informacji o swoich ulubionych miejscach i wycieczkach.</p>
+        <button type="submit" name="updateDescription" class="btn btn-primary" onclick="toggleEditButton(true)">Zmień opis</button>
+    </form>
 
+<script>
+    // Skrypt do pokazywania/ukrywania formularza i przycisku edycji
+    document.getElementById('editDescriptionBtn').addEventListener('click', function() {
+        var form = document.getElementById('editDescriptionForm');
+        form.style.display = 'block'; // Pokaż formularz
+        this.style.display = 'none'; // Ukryj przycisk
+    });
+
+    // Funkcja do przełączania widoczności przycisku edycji
+    function toggleEditButton(show) {
+        var editBtn = document.getElementById('editDescriptionBtn');
+        if (show) {
+            editBtn.style.display = 'none';
+        } else {
+            editBtn.style.display = 'block';
+        }
+    }
+</script>
             <!-- Sekcja ulubionych hoteli -->
             <h4>Ulubiony hotel</h4>
     <ul class="list-group mb-3">
