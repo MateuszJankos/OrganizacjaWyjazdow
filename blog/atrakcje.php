@@ -9,20 +9,20 @@ require_once '../includes/dbh.inc.php';
 
 // Pobranie parametrów wyszukiwania i sortowania
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
-$sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'hotelId';
+$sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'atraId';
 $sortOrder = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'DESC' : 'ASC';
 
 // Bezpieczne sortowanie
-$allowedSortColumns = ['hotelId', 'hotelMiasto', 'hotelNazwa', 'hotelOcena', 'hotelCena'];
+$allowedSortColumns = ['atraId', 'atraMiasto', 'atraNazwa', 'atraOpis', 'atraOcena'];
 if (!in_array($sortColumn, $allowedSortColumns)) {
-    $sortColumn = 'hotelId'; // Domyślna kolumna sortowania
+    $sortColumn = 'atraId'; // Domyślna kolumna sortowania
 }
 
-// Zapytanie SQL z opcjonalnym wyszukiwaniem i sortowaniem
-$sql = "SELECT hotelId, hotelMiasto, hotelNazwa, hotelOcena, hotelCena FROM hotele";
+// Zapytanie SQL z opcjonalnym wyszukiwaniem i sortowaniem dla atrakcji
+$sql = "SELECT atraId, atraMiasto, atraNazwa, atraOpis, atraOcena FROM Atrakcje";
 if (!empty($searchTerm)) {
     $searchTermEscaped = $conn->real_escape_string($searchTerm);
-    $sql .= " WHERE hotelMiasto LIKE '%$searchTermEscaped%' OR hotelNazwa LIKE '%$searchTermEscaped%'";
+    $sql .= " WHERE atraMiasto LIKE '%$searchTermEscaped%' OR atraNazwa LIKE '%$searchTermEscaped%' OR atraOpis LIKE '%$searchTermEscaped%'";
 }
 $sql .= " ORDER BY $sortColumn $sortOrder";
 
@@ -34,43 +34,43 @@ echo '<div class="container mt-5">';
 
     echo '<div class="row justify-content-center">';
         echo '<div class="col-md-6">';
-            echo '<form action="" method="get">'; // Dodany tag formularza
+            echo '<form action="" method="get">';
             echo '<div class="input-group mb-3">';
-                echo '<input type="text" name="search" class="form-control" placeholder="Dostępne miasta: Gdańsk, Kraków, Wrocław lub wyszukaj nazwy">';
+                echo '<input type="text" name="search" class="form-control" placeholder="Dostępne miasta: Gdańsk, Kraków, Wrocław lub wyszukaj nazwy, opisy">';
                 echo '<button class="btn btn-primary" type="submit">Szukaj</button>';
             echo '</div>';
-            echo '</form>'; // Zamknięcie tagu formularza
+            echo '</form>';
         echo '</div>';
     echo '</div>';
 echo '</div>';
 
 // Sprawdzenie wyników i wyświetlenie tabeli
 if ($result && $result->num_rows > 0) {
-  echo '<table class="table table-striped table-hover">';
-  echo '<thead class="thead-dark">';
-  echo '<tr>';
-  // Uwzględnienie parametru wyszukiwania w linkach sortowania
-  echo '<th><a href="?sort=hotelMiasto&order=' . ($sortColumn == 'hotelMiasto' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Miasto</a></th>';
-  echo '<th><a href="?sort=hotelNazwa&order=' . ($sortColumn == 'hotelNazwa' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Nazwa</a></th>';
-  echo '<th><a href="?sort=hotelOcena&order=' . ($sortColumn == 'hotelOcena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Ocena</a></th>';
-  echo '<th><a href="?sort=hotelCena&order=' . ($sortColumn == 'hotelCena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Cena</a></th>';
-  echo '</tr>';
-  echo '</thead>';
-  echo '<tbody>';
-  while($row = $result->fetch_assoc()) {
-      echo '<tr>';
-      echo '<td>' . htmlspecialchars($row["hotelMiasto"]) . '</td>';
-      echo '<td>' . htmlspecialchars($row["hotelNazwa"]) . '</td>';
-      echo '<td>' . htmlspecialchars($row["hotelOcena"]) . '</td>';
-      echo '<td>' . htmlspecialchars($row["hotelCena"]) . ' zł</td>';
-      echo '</tr>';
-  }
-  echo '</tbody>';
-  echo '</table>';
+    echo '<table class="table table-striped table-hover">';
+    echo '<thead class="thead-dark">';
+    echo '<tr>';
+    echo '<th><a href="?sort=atraMiasto&order=' . ($sortColumn == 'atraMiasto' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Miasto</a></th>';
+    echo '<th><a href="?sort=atraNazwa&order=' . ($sortColumn == 'atraNazwa' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Nazwa</a></th>';
+    echo '<th>Opis</th>'; // Opis nie jest sortowalny
+    echo '<th><a href="?sort=atraOcena&order=' . ($sortColumn == 'atraOcena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Ocena</a></th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
+    while($row = $result->fetch_assoc()) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($row["atraMiasto"]) . '</td>';
+        echo '<td>' . htmlspecialchars($row["atraNazwa"]) . '</td>';
+        echo '<td>' . htmlspecialchars($row["atraOpis"]) . '</td>';
+        echo '<td>' . htmlspecialchars($row["atraOcena"]) . '</td>';
+        echo '</tr>';
+    }
+    echo '</tbody>';
+    echo '</table>';
 } else {
-  echo "Nie znaleziono hoteli.";
+    echo "Nie znaleziono atrakcji.";
 }
 ?>
+
 
   <div class="row mb-2">
     <div class="col-md-6">
