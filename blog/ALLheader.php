@@ -21,7 +21,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="TESTstyle.css">   <!-- style.css -->
   </head>
-  <body>
+  <body data-bs-theme="dark">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
@@ -88,30 +88,40 @@
 </svg>
 
 <div class="container">
-  <header class="border-bottom lh-1 py-3">
-    <div class="row flex-nowrap justify-content-between align-items-center">
-      <div class="col-4 pt-1">
-      </div>
-      <div class="col-4 text-center">
-        <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">Przywitaj swoją podróż</a>
-      </div>
-      <div class="col-4 d-flex justify-content-end align-items-center">
-        <a class="link-secondary" href="#" aria-label="Search">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
-        </a>
-        <?php
-        if (isset($_SESSION["useruid"])) {
-        echo "<a class='btn btn-sm btn-outline-secondary' href='../includes/logout.inc.php'>Wyloguj się</a>";
-        echo "<a class='btn btn-sm btn-outline-secondary' href='profile.php'>Profil podróżnika</a>";
-        }
-        else {
-        echo "<a class='btn btn-sm btn-outline-secondary' href='../signup.php'>Stwórz konto!</a>";
-        echo "<a class='btn btn-sm btn-outline-secondary' href='../login.php'>Zaloguj się</a>";
-        }
-        ?>
+<header class="border-bottom lh-1 py-3">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-12 mb-3">
+          <a class="blog-header-logo text-body-emphasis text-decoration-none" href="#">Przywitaj swoją podróż</a>
+        </div>
+        <div class="col-12 d-flex flex-column flex-md-row justify-content-center align-items-center">
+          <div class="form-check form-switch mb-3 mb-md-0 mx-4">
+            <input class="form-check-input p-2" type="checkbox" role="switch" id="flexSwitchChecked" onclick="myFunction()"/>
+          </div>
+          <?php
+          if (isset($_SESSION["useruid"])) {
+            echo "<div class='d-flex flex-column flex-md-row justify-content-center align-items-center'>";
+            echo "<a class='btn btn-sm btn-outline-secondary mb-2 mb-md-0 mx-2' href='../includes/logout.inc.php'>Wyloguj się</a>";
+            echo "<a class='btn btn-sm btn-outline-secondary mx-2' href='profile.php'>Profil podróżnika</a>";
+            echo "</div>";
+          } else {
+            echo "<div class='d-flex flex-column flex-md-row justify-content-center align-items-center'>";
+            echo "<a class='btn btn-sm btn-outline-secondary mb-2 mb-md-0 mx-2' href='../signup.php'>Stwórz konto!</a>";
+            echo "<a class='btn btn-sm btn-outline-secondary mx-2' href='../login.php'>Zaloguj się</a>";
+            echo "</div>";
+          }
+          ?>
+        </div>
       </div>
     </div>
-  </header>
+</header>
+
+        <script>
+          function myFunction() {
+            var element = document.body;
+            element.dataset.bsTheme = element.dataset.bsTheme == "light" ? "dark" : "light";
+          }
+        </script>
 
   <div class="nav-scroller py-1 mb-3 border-bottom">
     <nav class="nav nav-underline justify-content-between">
