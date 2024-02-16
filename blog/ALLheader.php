@@ -126,7 +126,6 @@
           echo "<a class='nav-item nav-link link-body-emphasis' href='hotel.php'>Hotele</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='atrakcje.php'>Atrakcje</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='tłumacz.php'>Tłumacz</a>";
-          echo "<a class='nav-item nav-link disabled' aria-disabled='true' href='tłumacz.php'>Disabled</a>";
         }
         else {
           echo "<p>Zaloguj się na konto, aby odblokować pozostałe funkcję</p>";
