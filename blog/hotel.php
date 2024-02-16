@@ -7,26 +7,36 @@
 <?php
 require_once '../includes/dbh.inc.php';
 
-// Sprawdzenie, czy formularz wyszukiwania został wysłany
+// Pobranie parametrów wyszukiwania i sortowania
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+$sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'hotelId';
+$sortOrder = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'DESC' : 'ASC';
 
-// Zapytanie SQL do pobrania informacji o hotelach
-$sql = "SELECT hotelId, hotelMiasto, hotelNazwa, hotelOcena, hotelCena FROM hotele";
-if ($searchTerm) {
-    $sql .= " WHERE hotelMiasto LIKE '%$searchTerm%' OR hotelNazwa LIKE '%$searchTerm%'";
+// Bezpieczne sortowanie
+$allowedSortColumns = ['hotelId', 'hotelMiasto', 'hotelNazwa', 'hotelOcena', 'hotelCena'];
+if (!in_array($sortColumn, $allowedSortColumns)) {
+    $sortColumn = 'hotelId'; // Domyślna kolumna sortowania
 }
+
+// Zapytanie SQL z opcjonalnym wyszukiwaniem i sortowaniem
+$sql = "SELECT hotelId, hotelMiasto, hotelNazwa, hotelOcena, hotelCena FROM hotele";
+if (!empty($searchTerm)) {
+    $searchTermEscaped = $conn->real_escape_string($searchTerm);
+    $sql .= " WHERE hotelMiasto LIKE '%$searchTermEscaped%' OR hotelNazwa LIKE '%$searchTermEscaped%'";
+}
+$sql .= " ORDER BY $sortColumn $sortOrder";
 
 $result = $conn->query($sql);
 
 // Początek HTML
 echo '<div class="container mt-5">';
-    echo '<h1 class="text-center mb-4">Wyszukaj Hotele</h1>';
+    echo '<h1 class="text-center mb-4">Wyszukaj Hotel</h1>';
 
     echo '<div class="row justify-content-center">';
         echo '<div class="col-md-6">';
             echo '<form action="" method="get">'; // Dodany tag formularza
             echo '<div class="input-group mb-3">';
-                echo '<input type="text" name="search" class="form-control" placeholder="Dosępne miasta: Gdańsk, Kraków, Wrocław lub wyszukaj nazwy">';
+                echo '<input type="text" name="search" class="form-control" placeholder="Dostępne miasta: Gdańsk, Kraków, Wrocław lub wyszukaj nazwy">';
                 echo '<button class="btn btn-primary" type="submit">Szukaj</button>';
             echo '</div>';
             echo '</form>'; // Zamknięcie tagu formularza
@@ -34,30 +44,31 @@ echo '<div class="container mt-5">';
     echo '</div>';
 echo '</div>';
 
-// Sprawdzenie, czy wynik zapytania nie jest pusty i wyświetlenie danych
+// Sprawdzenie wyników i wyświetlenie tabeli
 if ($result && $result->num_rows > 0) {
-    // Przechodzenie przez każdy rekord
-    echo '<table class="table table-striped table-hover">';
-    // Dodanie nagłówka tabeli
-    echo '<thead class="thead-dark">';
-    echo '<tr><th>Miasto</th><th>Nazwa</th><th>Ocena</th><th>Cena</th></tr>';
-    echo '</thead>';
-    
-    // Przechodzenie przez każdy rekord i dodanie go do tabeli
-    echo '<tbody>';
-    while($row = $result->fetch_assoc()) {
-        echo '<tr>';
-        echo '<td>' . htmlspecialchars($row["hotelMiasto"]). '</td>';
-        echo '<td>' . htmlspecialchars($row["hotelNazwa"]). '</td>';
-        echo '<td>' . htmlspecialchars($row["hotelOcena"]). '</td>';
-        echo '<td>' . htmlspecialchars($row["hotelCena"]). ' zł</td>';
-        echo '</tr>';
-    }
-    echo '</tbody>';
-    // Zakończenie tabeli
-    echo '</table>';
+  echo '<table class="table table-striped table-hover">';
+  echo '<thead class="thead-dark">';
+  echo '<tr>';
+  // Uwzględnienie parametru wyszukiwania w linkach sortowania
+  echo '<th><a href="?sort=hotelMiasto&order=' . ($sortColumn == 'hotelMiasto' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Miasto</a></th>';
+  echo '<th><a href="?sort=hotelNazwa&order=' . ($sortColumn == 'hotelNazwa' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Nazwa</a></th>';
+  echo '<th><a href="?sort=hotelOcena&order=' . ($sortColumn == 'hotelOcena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Ocena</a></th>';
+  echo '<th><a href="?sort=hotelCena&order=' . ($sortColumn == 'hotelCena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Cena</a></th>';
+  echo '</tr>';
+  echo '</thead>';
+  echo '<tbody>';
+  while($row = $result->fetch_assoc()) {
+      echo '<tr>';
+      echo '<td>' . htmlspecialchars($row["hotelMiasto"]) . '</td>';
+      echo '<td>' . htmlspecialchars($row["hotelNazwa"]) . '</td>';
+      echo '<td>' . htmlspecialchars($row["hotelOcena"]) . '</td>';
+      echo '<td>' . htmlspecialchars($row["hotelCena"]) . ' zł</td>';
+      echo '</tr>';
+  }
+  echo '</tbody>';
+  echo '</table>';
 } else {
-    echo "Nie znaleziono hoteli.";
+  echo "Nie znaleziono hoteli.";
 }
 ?>
 
