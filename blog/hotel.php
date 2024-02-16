@@ -49,21 +49,55 @@ if ($result && $result->num_rows > 0) {
   echo '<table class="table table-striped table-hover">';
   echo '<thead class="thead-dark">';
   echo '<tr>';
-  // Uwzględnienie parametru wyszukiwania w linkach sortowania
+  // Linki sortowania z uwzględnieniem parametru wyszukiwania
   echo '<th><a href="?sort=hotelMiasto&order=' . ($sortColumn == 'hotelMiasto' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Miasto</a></th>';
   echo '<th><a href="?sort=hotelNazwa&order=' . ($sortColumn == 'hotelNazwa' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Nazwa</a></th>';
   echo '<th><a href="?sort=hotelOcena&order=' . ($sortColumn == 'hotelOcena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Ocena</a></th>';
   echo '<th><a href="?sort=hotelCena&order=' . ($sortColumn == 'hotelCena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Cena</a></th>';
+  echo '<th>Działanie</th>';
   echo '</tr>';
   echo '</thead>';
   echo '<tbody>';
   while($row = $result->fetch_assoc()) {
-      echo '<tr>';
-      echo '<td>' . htmlspecialchars($row["hotelMiasto"]) . '</td>';
-      echo '<td>' . htmlspecialchars($row["hotelNazwa"]) . '</td>';
-      echo '<td>' . htmlspecialchars($row["hotelOcena"]) . '</td>';
-      echo '<td>' . htmlspecialchars($row["hotelCena"]) . ' zł</td>';
-      echo '</tr>';
+    echo '<tr>';
+    echo '<td>' . htmlspecialchars($row["hotelMiasto"]) . '</td>';
+    echo '<td>' . htmlspecialchars($row["hotelNazwa"]) . '</td>';
+    echo '<td>' . htmlspecialchars($row["hotelOcena"]) . '</td>';
+    echo '<td>' . htmlspecialchars($row["hotelCena"]) . ' zł</td>';
+    // Przycisk "Dodaj do ulubionych"
+    echo '<td>';
+    if (isset($_SESSION["userid"])) {
+      $userId = $_SESSION["userid"];
+      // Sprawdź, czy hotel jest już dodany do ulubionych
+      $profilQuery = "SELECT profilUluhotel FROM profil WHERE usersId = ?";
+      $profilStmt = mysqli_stmt_init($conn);
+      if (mysqli_stmt_prepare($profilStmt, $profilQuery)) {
+          mysqli_stmt_bind_param($profilStmt, "i", $userId);
+          mysqli_stmt_execute($profilStmt);
+          $resultProfil = mysqli_stmt_get_result($profilStmt);
+          $profil = mysqli_fetch_assoc($resultProfil);
+          $currentFavorites = $profil['profilUluhotel'] ? explode(',', $profil['profilUluhotel']) : [];
+          
+          if (!in_array($row["hotelId"], $currentFavorites)) {
+              // Jeśli hotel nie jest jeszcze w ulubionych, dodaj przycisk umożliwiający dodanie
+              echo '<form action="add_to_favorites.php" method="post">';
+              echo '<input type="hidden" name="hotelId" value="' . $row["hotelId"] . '">';
+              echo '<button type="submit" name="addFavorite" class="btn btn-primary btn-sm">Dodaj do ulubionych</button>';
+              echo '</form>';
+          } else {
+              // Jeśli hotel jest już w ulubionych, dodaj przycisk umożliwiający usunięcie
+              echo '<form action="remove_from_favorites.php" method="post" style="display: inline-block;">';
+              echo '<input type="hidden" name="hotelId" value="' . $row["hotelId"] . '">';
+              echo '<button type="submit" name="removeFavorite" class="btn btn-danger btn-sm">Usuń z ulubionych</button>';
+              echo '</form>';
+          }
+      }
+    }
+    else {
+        echo 'Zaloguj się, aby dodać do ulubionych.';
+    }
+    echo '</td>';
+    echo '</tr>';
   }
   echo '</tbody>';
   echo '</table>';
