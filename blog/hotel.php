@@ -3,46 +3,64 @@
 ?>
 
 <main class="container">
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary" style="background-size: cover; background-position: center;">
-          <div class="col-lg-12">
-            <h1 class="display-6 fst-italic">Znajdź hotel</h1>
-            <form>
-              <div class="form-group">
-                <label for="departureLocation">Miejsce: </label>
-                <input type="text" class="form-control" id="location" placeholder="Gdzie zamierzasz jechać?">
-              </div>
-              <div class="form-group">
-                <label for="destination">Data zameldowania:</label>
-                <input type="date" class="form-control" id="firstday" placeholder="">
-              </div>
-              <div class="form-group">
-                <label for="passengerCount">Data Wymeldowania:</label>
-                <input type="date" class="form-control" id="lastday" placeholder="">
-              </div>
-              <div class="form-group">
-                <label for="passengerCount">Dorośli:</label>
-                <input type="number" class="form-control" id="adults" placeholder="1">
-              </div>
-              <div class="form-group">
-                <label for="passengerCount">Dzieci:</label>
-                <input type="number" class="form-control" id="kids" placeholder="0">
-              </div>
-              <div class="form-group">
-                <label for="passengerCount">Ilość pokoi:</label>
-                <input type="number" class="form-control" id="rooms" placeholder="1">
-              </div>
-              <button type="submit" class="btn btn-primary mt-3">Wyszukaj</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-      
-  
+
+<?php
+require_once '../includes/dbh.inc.php';
+
+// Sprawdzenie, czy formularz wyszukiwania został wysłany
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Zapytanie SQL do pobrania informacji o hotelach
+$sql = "SELECT hotelId, hotelMiasto, hotelNazwa, hotelOcena, hotelCena FROM hotele";
+if ($searchTerm) {
+    $sql .= " WHERE hotelMiasto LIKE '%$searchTerm%' OR hotelNazwa LIKE '%$searchTerm%'";
+}
+
+$result = $conn->query($sql);
+
+// Początek HTML
+echo '<div class="container mt-5">';
+    echo '<h1 class="text-center mb-4">Wyszukaj Hotele</h1>';
+
+    echo '<div class="row justify-content-center">';
+        echo '<div class="col-md-6">';
+            echo '<form action="" method="get">'; // Dodany tag formularza
+            echo '<div class="input-group mb-3">';
+                echo '<input type="text" name="search" class="form-control" placeholder="Dosępne miasta: Gdańsk, Kraków, Wrocław lub wyszukaj nazwy">';
+                echo '<button class="btn btn-primary" type="submit">Szukaj</button>';
+            echo '</div>';
+            echo '</form>'; // Zamknięcie tagu formularza
+        echo '</div>';
+    echo '</div>';
+echo '</div>';
+
+// Sprawdzenie, czy wynik zapytania nie jest pusty i wyświetlenie danych
+if ($result && $result->num_rows > 0) {
+    // Przechodzenie przez każdy rekord
+    echo '<table class="table table-striped table-hover">';
+    // Dodanie nagłówka tabeli
+    echo '<thead class="thead-dark">';
+    echo '<tr><th>Miasto</th><th>Nazwa</th><th>Ocena</th><th>Cena</th></tr>';
+    echo '</thead>';
+    
+    // Przechodzenie przez każdy rekord i dodanie go do tabeli
+    echo '<tbody>';
+    while($row = $result->fetch_assoc()) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($row["hotelMiasto"]). '</td>';
+        echo '<td>' . htmlspecialchars($row["hotelNazwa"]). '</td>';
+        echo '<td>' . htmlspecialchars($row["hotelOcena"]). '</td>';
+        echo '<td>' . htmlspecialchars($row["hotelCena"]). ' zł</td>';
+        echo '</tr>';
+    }
+    echo '</tbody>';
+    // Zakończenie tabeli
+    echo '</table>';
+} else {
+    echo "Nie znaleziono hoteli.";
+}
+?>
+
   <div class="row mb-2">
     <div class="col-md-6">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
