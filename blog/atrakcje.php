@@ -13,16 +13,21 @@ $sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'atraId';
 $sortOrder = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'DESC' : 'ASC';
 
 // Bezpieczne sortowanie
-$allowedSortColumns = ['atraId', 'RodzajAtrakcji', 'atraNazwa', 'atraAdres', 'atraOcena'];
+$allowedSortColumns = ['atraId', 'RodzajAtrakcji', 'atraNazwa', 'atraAdres', 'atraOcena', 'NazwaMiasta'];
 if (!in_array($sortColumn, $allowedSortColumns)) {
     $sortColumn = 'atraId'; // Domyślna kolumna sortowania
 }
 
 // Zapytanie SQL z opcjonalnym wyszukiwaniem i sortowaniem dla atrakcji
-$sql = "SELECT atraId, RodzajAtrakcji, atraNazwa, atraAdres, atraOcena FROM Atrakcje";
+$sql = "SELECT Atrakcje.atraId, Atrakcje.RodzajAtrakcji, Atrakcje.atraNazwa, Atrakcje.atraAdres, Atrakcje.atraOcena, Miasta.NazwaMiasta
+        FROM Atrakcje
+        INNER JOIN Miasta ON Atrakcje.ID_miasta = Miasta.ID_miasta";
 if (!empty($searchTerm)) {
     $searchTermEscaped = $conn->real_escape_string($searchTerm);
-    $sql .= " WHERE RodzajAtrakcji LIKE '%$searchTermEscaped%' OR atraNazwa LIKE '%$searchTermEscaped%' OR atraAdres LIKE '%$searchTermEscaped%'";
+    $sql .= " WHERE Atrakcje.RodzajAtrakcji LIKE '%$searchTermEscaped%' 
+              OR Atrakcje.atraNazwa LIKE '%$searchTermEscaped%' 
+              OR Atrakcje.atraAdres LIKE '%$searchTermEscaped%'
+              OR Miasta.NazwaMiasta LIKE '%$searchTermEscaped%'";
 }
 $sql .= " ORDER BY $sortColumn $sortOrder";
 
@@ -51,9 +56,10 @@ if ($result && $result->num_rows > 0) {
     echo '<thead class="thead-dark">';
     echo '<tr>';
     // Nagłówki tabeli z linkami do sortowania
-    echo '<th><a href="?sort=RodzajAtrakcji&order=' . ($sortColumn == 'RodzajAtrakcji' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Miasto</a></th>';
+    echo '<th><a href="?sort=RodzajAtrakcji&order=' . ($sortColumn == 'RodzajAtrakcji' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Kategoria</a></th>';
     echo '<th><a href="?sort=atraNazwa&order=' . ($sortColumn == 'atraNazwa' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Nazwa</a></th>';
-    echo '<th><a href="?sort=atraAdres&order=' . ($sortColumn == 'atraAdres' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Ocena</a></th>';
+    echo '<th><a href="?sort=atraAdres&order=' . ($sortColumn == 'atraAdres' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Adres</a></th>';
+    echo '<th><a href="?sort=NazwaMiasta&order=' . ($sortColumn == 'NazwaMiasta' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Miasto</a></th>';
     echo '<th><a href="?sort=atraOcena&order=' . ($sortColumn == 'atraOcena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Ocena</a></th>';
     echo '<th>Działanie</th>';
     echo '</tr>';
@@ -64,6 +70,7 @@ if ($result && $result->num_rows > 0) {
         echo '<td>' . htmlspecialchars($row["RodzajAtrakcji"]) . '</td>';
         echo '<td>' . htmlspecialchars($row["atraNazwa"]) . '</td>';
         echo '<td>' . htmlspecialchars($row["atraAdres"]) . '</td>';
+        echo '<td>' . htmlspecialchars($row["NazwaMiasta"]) . '</td>';
         echo '<td>' . htmlspecialchars($row["atraOcena"]) . '</td>';
         // Dodanie przycisków "Dodaj do ulubionych" lub "Usuń z ulubionych"
         echo '<td>';
