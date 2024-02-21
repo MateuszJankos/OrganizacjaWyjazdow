@@ -3,7 +3,7 @@
 $serverName = "localhost";
 $dBUsername = "root";
 $dBPassword = "";
-$dBName = "wyjazdy";
+$dBName = "testwyjazdy";
 
 $conn = mysqli_connect($serverName, $dBUsername, $dBPassword, $dBName);
 //jeśli się nie połączy to wyrzuca błąd
