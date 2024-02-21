@@ -129,12 +129,18 @@
       <a class="nav-item nav-link link-body-emphasis" href="mapy.php">Mapy</a>
       <?php
         if (isset($_SESSION["useruid"])) {
+          echo "<a class='nav-item nav-link link-body-emphasis' href='grupy.php'>Grupy</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='Wyjazdy.php'>Wyjazdy</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='rezerwacjahotelu.php'>Rezerwacja Hotelu</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='planowanieatrakcji.php'>Planowanie atrakcji</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='transport.php'>Transport</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='hotel.php'>Hotele</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='atrakcje.php'>Atrakcje</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='message.php'>Wiadomość</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='pociagi.php'>Pociągi</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='Samoloty.php'>Samoloty</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='kmiejska.php'>Komunikacja miejska</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='taxi.php'>Taxi</a>";
-          echo "<a class='nav-item nav-link link-body-emphasis' href='hotel.php'>Hotele</a>";
-          echo "<a class='nav-item nav-link link-body-emphasis' href='atrakcje.php'>Atrakcje</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='tłumacz.php'>Tłumacz</a>";
         }
         else {
