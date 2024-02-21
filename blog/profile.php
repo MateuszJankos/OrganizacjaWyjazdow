@@ -83,6 +83,7 @@ if (isset($_SESSION["userid"])) {
         }
     }
 </script>
+
             <!-- Sekcja ulubionych hoteli -->
             <h4>Ulubiony hotel</h4>
     <ul class="list-group mb-3">
@@ -90,7 +91,7 @@ if (isset($_SESSION["userid"])) {
         foreach ($ulubioneHoteleIds as $hotelId) {
             if (!empty($hotelId)) {
                 // Pobranie informacji o każdym hotelu
-                $hotelQuery = "SELECT hotelNazwa, hotelMiasto FROM hotele WHERE hotelId = ?";
+                $hotelQuery = "SELECT hotelNazwa, hotelAdres FROM hotele WHERE hotelId = ?";
                 $hotelStmt = mysqli_stmt_init($conn);
                 if (mysqli_stmt_prepare($hotelStmt, $hotelQuery)) {
                     mysqli_stmt_bind_param($hotelStmt, "i", $hotelId);
@@ -98,7 +99,7 @@ if (isset($_SESSION["userid"])) {
                     $hotelResult = mysqli_stmt_get_result($hotelStmt);
                     $hotel = mysqli_fetch_assoc($hotelResult);
                     
-                    echo '<li class="list-group-item">' . htmlspecialchars($hotel['hotelNazwa']) . ' - ' . htmlspecialchars($hotel['hotelMiasto']) . '</li>';
+                    echo '<li class="list-group-item">' . htmlspecialchars($hotel['hotelNazwa']) . ' - ' . htmlspecialchars($hotel['hotelAdres']) . '</li>';
                 }
             }
         }
@@ -114,7 +115,7 @@ if (isset($_SESSION["userid"])) {
         foreach ($ulubioneAtrakcjeIds as $atraId) {
             if (!empty($atraId)) {
                 // Pobranie informacji o każdej atrakcji
-                $atraQuery = "SELECT atraNazwa, atraMiasto FROM atrakcje WHERE atraId = ?";
+                $atraQuery = "SELECT atraNazwa, atraAdres FROM atrakcje WHERE atraId = ?";
                 $atraStmt = mysqli_stmt_init($conn);
                 if (mysqli_stmt_prepare($atraStmt, $atraQuery)) {
                     mysqli_stmt_bind_param($atraStmt, "i", $atraId);
@@ -122,7 +123,7 @@ if (isset($_SESSION["userid"])) {
                     $atraResult = mysqli_stmt_get_result($atraStmt);
                     $atra = mysqli_fetch_assoc($atraResult);
                     
-                    echo '<li class="list-group-item">' . htmlspecialchars($atra['atraNazwa']) . ' - ' . htmlspecialchars($atra['atraMiasto']) . '</li>';
+                    echo '<li class="list-group-item">' . htmlspecialchars($atra['atraNazwa']) . ' - ' . htmlspecialchars($atra['atraAdres']) . '</li>';
                 }
             }
         }

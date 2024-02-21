@@ -71,7 +71,7 @@ if ($result && $result->num_rows > 0) {
         echo '<td>' . htmlspecialchars($row["atraNazwa"]) . '</td>';
         echo '<td>' . htmlspecialchars($row["atraAdres"]) . '</td>';
         echo '<td>' . htmlspecialchars($row["NazwaMiasta"]) . '</td>';
-        echo '<td>' . htmlspecialchars($row["atraOcena"]) . '</td>';
+        echo '<td>' . htmlspecialchars($row["atraOcena"]) . ' / 5.00</td>';
         // Dodanie przycisków "Dodaj do ulubionych" lub "Usuń z ulubionych"
         echo '<td>';
         if (isset($_SESSION["userid"])) {

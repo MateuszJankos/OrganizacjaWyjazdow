@@ -13,16 +13,20 @@ $sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'hotelId';
 $sortOrder = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'DESC' : 'ASC';
 
 // Bezpieczne sortowanie
-$allowedSortColumns = ['hotelId', 'hotelMiasto', 'hotelNazwa', 'hotelOcena', 'hotelCena'];
+$allowedSortColumns = ['hotelId', 'hotelNazwa', 'hotelOcena', 'hotelCena', 'hotelAdres', 'NazwaMiasta'];
 if (!in_array($sortColumn, $allowedSortColumns)) {
     $sortColumn = 'hotelId'; // Domyślna kolumna sortowania
 }
 
 // Zapytanie SQL z opcjonalnym wyszukiwaniem i sortowaniem
-$sql = "SELECT hotelId, hotelMiasto, hotelNazwa, hotelOcena, hotelCena FROM hotele";
+$sql = "SELECT hotele.hotelId, hotele.hotelNazwa, hotele.hotelOcena, hotele.hotelCena, hotele.hotelAdres, Miasta.NazwaMiasta 
+        FROM hotele
+        INNER JOIN Miasta ON hotele.ID_miasta = Miasta.ID_miasta";
 if (!empty($searchTerm)) {
     $searchTermEscaped = $conn->real_escape_string($searchTerm);
-    $sql .= " WHERE hotelMiasto LIKE '%$searchTermEscaped%' OR hotelNazwa LIKE '%$searchTermEscaped%'";
+    $sql .= " WHERE Miasta.NazwaMiasta LIKE '%$searchTermEscaped%' 
+              OR hotele.hotelNazwa LIKE '%$searchTermEscaped%'
+              OR hotele.hotelAdres LIKE '%$searchTermEscaped%'";
 }
 $sql .= " ORDER BY $sortColumn $sortOrder";
 
@@ -50,20 +54,22 @@ if ($result && $result->num_rows > 0) {
   echo '<thead class="thead-dark">';
   echo '<tr>';
   // Linki sortowania z uwzględnieniem parametru wyszukiwania
-  echo '<th><a href="?sort=hotelMiasto&order=' . ($sortColumn == 'hotelMiasto' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Miasto</a></th>';
+  echo '<th><a href="?sort=NazwaMiasta&order=' . ($sortColumn == 'NazwaMiasta' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Miasto</a></th>';
   echo '<th><a href="?sort=hotelNazwa&order=' . ($sortColumn == 'hotelNazwa' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Nazwa</a></th>';
   echo '<th><a href="?sort=hotelOcena&order=' . ($sortColumn == 'hotelOcena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Ocena</a></th>';
   echo '<th><a href="?sort=hotelCena&order=' . ($sortColumn == 'hotelCena' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Cena</a></th>';
+  echo '<th><a href="?sort=hotelAdres&order=' . ($sortColumn == 'hotelAdres' && $sortOrder == 'ASC' ? 'desc' : 'asc') . '&search=' . urlencode($searchTerm) . '">Adres</a></th>';
   echo '<th>Działanie</th>';
   echo '</tr>';
   echo '</thead>';
   echo '<tbody>';
   while($row = $result->fetch_assoc()) {
     echo '<tr>';
-    echo '<td>' . htmlspecialchars($row["hotelMiasto"]) . '</td>';
+    echo '<td>' . htmlspecialchars($row["NazwaMiasta"]) . '</td>';
     echo '<td>' . htmlspecialchars($row["hotelNazwa"]) . '</td>';
-    echo '<td>' . htmlspecialchars($row["hotelOcena"]) . '</td>';
+    echo '<td>' . htmlspecialchars($row["hotelOcena"]) . ' / 5.00</td>';
     echo '<td>' . htmlspecialchars($row["hotelCena"]) . ' zł</td>';
+    echo '<td>' . htmlspecialchars($row["hotelAdres"]) . '</td>';
     // Przycisk "Dodaj do ulubionych"
     echo '<td>';
     if (isset($_SESSION["userid"])) {
