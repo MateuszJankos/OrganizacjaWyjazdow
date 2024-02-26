@@ -29,7 +29,7 @@ if (isset($_SESSION["userid"])) {
 $profilOpis = $profil['profilOpis'] ?? "Tu pojawi się twój opis.";
 
 // Pobranie identyfikatorów ulubionych hoteli użytkownika
-$ulubioneHoteleQuery = "SELECT hotelId FROM ulubione_hotele WHERE userId = ?";
+$ulubioneHoteleQuery = "SELECT hotelId FROM ulubione_hotele WHERE usersId = ?";
 $ulubioneHoteleStmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($ulubioneHoteleStmt, $ulubioneHoteleQuery)) {
     echo "Błąd zapytania SQL dla ulubionych hoteli";
@@ -41,7 +41,7 @@ $ulubioneHoteleResult = mysqli_stmt_get_result($ulubioneHoteleStmt);
 $ulubioneHoteleIds = mysqli_fetch_all($ulubioneHoteleResult, MYSQLI_ASSOC);
 
 // Pobranie identyfikatorów ulubionych atrakcji użytkownika
-$ulubioneAtrakcjeQuery = "SELECT atraId FROM ulubione_atrakcje WHERE userId = ?";
+$ulubioneAtrakcjeQuery = "SELECT atraId FROM ulubione_atrakcje WHERE usersId = ?";
 $ulubioneAtrakcjeStmt = mysqli_stmt_init($conn);
 if (!mysqli_stmt_prepare($ulubioneAtrakcjeStmt, $ulubioneAtrakcjeQuery)) {
     echo "Błąd zapytania SQL dla ulubionych atrakcji";
@@ -95,53 +95,87 @@ $ulubioneAtrakcjeIds = mysqli_fetch_all($ulubioneAtrakcjeResult, MYSQLI_ASSOC);
 </script>
 
             <!-- Sekcja ulubionych hoteli -->
-            <h4>Ulubiony hotel</h4>
-    <ul class="list-group mb-3">
-        <?php
-        foreach ($ulubioneHoteleIds as $hotelId) {
-            if (!empty($hotelId)) {
-                // Pobranie informacji o każdym hotelu
-                $hotelQuery = "SELECT hotelNazwa, hotelAdres FROM hotele WHERE hotelId = ?";
-                $hotelStmt = mysqli_stmt_init($conn);
-                if (mysqli_stmt_prepare($hotelStmt, $hotelQuery)) {
-                    mysqli_stmt_bind_param($hotelStmt, "i", $hotelId);
-                    mysqli_stmt_execute($hotelStmt);
-                    $hotelResult = mysqli_stmt_get_result($hotelStmt);
-                    $hotel = mysqli_fetch_assoc($hotelResult);
-                    
-                    echo '<li class="list-group-item">' . htmlspecialchars($hotel['hotelNazwa']) . ' - ' . htmlspecialchars($hotel['hotelAdres']) . '</li>';
-                }
-            }
-        }
-        if (empty($profil['profilUluhotel'])) {
-            echo '<li class="list-group-item">Brak ulubionych hoteli.</li>';
-        }
-        ?>
-    </ul>
+            <h4>Ulubione hotele</h4>
+<ul class="list-group mb-3">
+    <?php
+    if (isset($_SESSION['userid'])) {
+        $userId = $_SESSION['userid'];
 
-    <h4>Ulubiona atrakcja</h4>
-    <ul class="list-group">
-        <?php
-        foreach ($ulubioneAtrakcjeIds as $atraId) {
-            if (!empty($atraId)) {
-                // Pobranie informacji o każdej atrakcji
-                $atraQuery = "SELECT atraNazwa, atraAdres FROM atrakcje WHERE atraId = ?";
-                $atraStmt = mysqli_stmt_init($conn);
-                if (mysqli_stmt_prepare($atraStmt, $atraQuery)) {
-                    mysqli_stmt_bind_param($atraStmt, "i", $atraId);
-                    mysqli_stmt_execute($atraStmt);
-                    $atraResult = mysqli_stmt_get_result($atraStmt);
-                    $atra = mysqli_fetch_assoc($atraResult);
-                    
-                    echo '<li class="list-group-item">' . htmlspecialchars($atra['atraNazwa']) . ' - ' . htmlspecialchars($atra['atraAdres']) . '</li>';
+        // Pobranie identyfikatorów ulubionych hoteli użytkownika
+        $favHoteleQuery = "SELECT hotelId FROM ulubione_hotele WHERE usersId = ?";
+        $favHoteleStmt = mysqli_stmt_init($conn);
+        if (mysqli_stmt_prepare($favHoteleStmt, $favHoteleQuery)) {
+            mysqli_stmt_bind_param($favHoteleStmt, "i", $userId);
+            mysqli_stmt_execute($favHoteleStmt);
+            $favHoteleResult = mysqli_stmt_get_result($favHoteleStmt);
+            $ulubioneHoteleIds = mysqli_fetch_all($favHoteleResult, MYSQLI_ASSOC);
+
+            if ($ulubioneHoteleIds) {
+                foreach ($ulubioneHoteleIds as $hotel) {
+                    // Pobranie informacji o każdym hotelu
+                    $hotelQuery = "SELECT hotelNazwa, hotelAdres FROM hotele WHERE hotelId = ?";
+                    $hotelStmt = mysqli_stmt_init($conn);
+                    if (mysqli_stmt_prepare($hotelStmt, $hotelQuery)) {
+                        mysqli_stmt_bind_param($hotelStmt, "i", $hotel['hotelId']);
+                        mysqli_stmt_execute($hotelStmt);
+                        $hotelResult = mysqli_stmt_get_result($hotelStmt);
+                        $hotelDetails = mysqli_fetch_assoc($hotelResult);
+
+                        echo '<li class="list-group-item">' . htmlspecialchars($hotelDetails['hotelNazwa']) . ' - ' . htmlspecialchars($hotelDetails['hotelAdres']) . '</li>';
+                    }
                 }
+            } else {
+                echo '<li class="list-group-item">Brak ulubionych hoteli.</li>';
             }
+        } else {
+            echo '<li class="list-group-item">Błąd przy pobieraniu ulubionych hoteli.</li>';
         }
-        if (empty($profil['profilUluatra'])) {
-            echo '<li class="list-group-item">Brak ulubionych atrakcji.</li>';
+    } else {
+        echo '<li class="list-group-item">Zaloguj się, aby zobaczyć ulubione hotele.</li>';
+    }
+    ?>
+</ul>
+
+    <h4>Ulubione atrakcje</h4>
+<ul class="list-group">
+    <?php
+    if (isset($_SESSION['userid'])) {
+        $userId = $_SESSION['userid'];
+
+        // Pobranie identyfikatorów ulubionych atrakcji użytkownika
+        $favAtrakcjeQuery = "SELECT atraId FROM ulubione_atrakcje WHERE usersId = ?";
+        $favAtrakcjeStmt = mysqli_stmt_init($conn);
+        if (mysqli_stmt_prepare($favAtrakcjeStmt, $favAtrakcjeQuery)) {
+            mysqli_stmt_bind_param($favAtrakcjeStmt, "i", $userId);
+            mysqli_stmt_execute($favAtrakcjeStmt);
+            $favAtrakcjeResult = mysqli_stmt_get_result($favAtrakcjeStmt);
+            $ulubioneAtrakcjeIds = mysqli_fetch_all($favAtrakcjeResult, MYSQLI_ASSOC);
+
+            if ($ulubioneAtrakcjeIds) {
+                foreach ($ulubioneAtrakcjeIds as $atra) {
+                    // Pobranie informacji o każdej atrakcji
+                    $atraQuery = "SELECT atraNazwa, atraAdres FROM atrakcje WHERE atraId = ?";
+                    $atraStmt = mysqli_stmt_init($conn);
+                    if (mysqli_stmt_prepare($atraStmt, $atraQuery)) {
+                        mysqli_stmt_bind_param($atraStmt, "i", $atra['atraId']);
+                        mysqli_stmt_execute($atraStmt);
+                        $atraResult = mysqli_stmt_get_result($atraStmt);
+                        $atraDetails = mysqli_fetch_assoc($atraResult);
+
+                        echo '<li class="list-group-item">' . htmlspecialchars($atraDetails['atraNazwa']) . ' - ' . htmlspecialchars($atraDetails['atraAdres']) . '</li>';
+                    }
+                }
+            } else {
+                echo '<li class="list-group-item">Brak ulubionych atrakcji.</li>';
+            }
+        } else {
+            echo '<li class="list-group-item">Błąd przy pobieraniu ulubionych atrakcji.</li>';
         }
-        ?>
-    </ul>
+    } else {
+        echo '<li class="list-group-item">Zaloguj się, aby zobaczyć ulubione atrakcje.</li>';
+    }
+    ?>
+</ul>
 </main>
 
 <?php 
