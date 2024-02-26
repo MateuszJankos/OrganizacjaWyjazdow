@@ -3,14 +3,15 @@ session_start();
 require_once '../includes/dbh.inc.php';
 
 if (isset($_POST['updateDescription']) && isset($_SESSION['userid'])) {
-    $userId = $_SESSION['userid'];
-    $newDescription = trim($_POST['profileDescription']);
+    $userId = $_SESSION['userid']; // Pobranie ID zalogowanego użytkownika
+    $newDescription = $_POST['profileDescription']; // Pobranie nowego opisu profilu z formularza
 
-    $sql = "UPDATE profil SET profilOpis = ? WHERE usersId = ?";
+    // Aktualizacja opisu profilu w tabeli users
+    $sql = "UPDATE users SET profilOpis = ? WHERE usersId = ?";
     $stmt = mysqli_stmt_init($conn);
-
     if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("Location: profile.php?error=sqlerror");
+        // Jeśli przygotowanie zapytania nie powiedzie się, przekieruj z błędem
+        header("Location: ../profile.php?error=sqlerror");
         exit();
     }
 
