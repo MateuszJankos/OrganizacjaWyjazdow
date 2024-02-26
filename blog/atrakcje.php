@@ -72,43 +72,39 @@ if ($result && $result->num_rows > 0) {
         echo '<td>' . htmlspecialchars($row["atraAdres"]) . '</td>';
         echo '<td>' . htmlspecialchars($row["NazwaMiasta"]) . '</td>';
         echo '<td>' . htmlspecialchars($row["atraOcena"]) . ' / 5.00</td>';
-        // Dodanie przycisków "Dodaj do ulubionych" lub "Usuń z ulubionych"
-        echo '<td>';
-        if (isset($_SESSION["userid"])) {
-            $userId = $_SESSION["userid"];
-            // Sprawdź, czy atrakcja jest już dodana do ulubionych
-            $profilQuery = "SELECT profilUluatra FROM profil WHERE usersId = ?";
-            $profilStmt = mysqli_stmt_init($conn);
-            if (mysqli_stmt_prepare($profilStmt, $profilQuery)) {
-                mysqli_stmt_bind_param($profilStmt, "i", $userId);
-                mysqli_stmt_execute($profilStmt);
-                $resultProfil = mysqli_stmt_get_result($profilStmt);
-                if ($profil = mysqli_fetch_assoc($resultProfil)) {
-                    $currentFavorites = $profil['profilUluatra'] ? explode(',', $profil['profilUluatra']) : [];
-                    if (!in_array($row["atraId"], $currentFavorites)) {
-                        // Jeśli atrakcja nie jest jeszcze w ulubionych, dodaj przycisk umożliwiający dodanie
-                        echo '<form action="add_to_favorites_atrakcje.php" method="post">';
-                        echo '<input type="hidden" name="atraId" value="' . $row["atraId"] . '">';
-                        echo '<button type="submit" name="addFavoriteAtrakcja" class="btn btn-primary btn-sm">Dodaj do ulubionych</button>';
-                        echo '</form>';
-                    } else {
-                        // Jeśli atrakcja jest już w ulubionych, dodaj przycisk umożliwiający usunięcie
-                        echo '<form action="remove_from_favorites_atrakcje.php" method="post">';
-                        echo '<input type="hidden" name="atraId" value="' . $row["atraId"] . '">';
-                        echo '<button type="submit" name="removeFavoriteAtrakcja" class="btn btn-danger btn-sm">Usuń z ulubionych</button>';
-                        echo '</form>';
-                    }
-                } else {
-                    echo 'Błąd podczas pobierania informacji o ulubionych atrakcjach.';
-                }
-            } else {
-                echo 'Błąd zapytania SQL.';
-            }
+        // ...
+// Działanie przycisków "Dodaj do ulubionych" lub "Usuń z ulubionych"
+echo '<td>';
+if (isset($_SESSION["userid"])) {
+    $userId = $_SESSION["userid"];
+    // Sprawdź, czy atrakcja jest już dodana do ulubionych
+    $favAtrakcjeQuery = "SELECT * FROM ulubione_atrakcje WHERE usersId = ? AND atraId = ?";
+    $favAtrakcjeStmt = mysqli_stmt_init($conn);
+    if (mysqli_stmt_prepare($favAtrakcjeStmt, $favAtrakcjeQuery)) {
+        mysqli_stmt_bind_param($favAtrakcjeStmt, "ii", $userId, $row["atraId"]);
+        mysqli_stmt_execute($favAtrakcjeStmt);
+        $resultFavAtrakcje = mysqli_stmt_get_result($favAtrakcjeStmt);
+        if (mysqli_fetch_assoc($resultFavAtrakcje)) {
+            // Jeśli atrakcja jest już w ulubionych, dodaj przycisk umożliwiający usunięcie
+            echo '<form action="remove_from_favorites_atrakcje.php" method="post">';
+            echo '<input type="hidden" name="atraId" value="' . $row["atraId"] . '">';
+            echo '<button type="submit" name="removeFavoriteAtrakcja" class="btn btn-danger btn-sm">Usuń z ulubionych</button>';
+            echo '</form>';
         } else {
-            echo 'Zaloguj się, aby dodać do ulubionych.';
+            // Jeśli atrakcja nie jest jeszcze w ulubionych, dodaj przycisk umożliwiający dodanie
+            echo '<form action="add_to_favorites_atrakcje.php" method="post">';
+            echo '<input type="hidden" name="atraId" value="' . $row["atraId"] . '">';
+            echo '<button type="submit" name="addFavoriteAtrakcja" class="btn btn-primary btn-sm">Dodaj do ulubionych</button>';
+            echo '</form>';
         }
-        echo '</td>';
-        echo '</tr>';
+    } else {
+        echo 'Błąd zapytania SQL.';
+    }
+} else {
+    echo 'Zaloguj się, aby dodać do ulubionych.';
+}
+echo '</td>';
+// ...
     }
 echo '</tbody>';
 echo '</table>';
