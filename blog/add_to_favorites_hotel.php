@@ -2,9 +2,9 @@
 session_start();
 require_once '../includes/dbh.inc.php';
 
-if (isset($_POST['addFavorite']) && isset($_SESSION['userid'])) {
-    $userId = $_SESSION['userid']; // Pobranie ID zalogowanego użytkownika
-    $hotelId = $_POST['hotelId']; // Pobranie ID hotelu z formularza
+if (isset($_POST['addFavoriteHotel']) && isset($_SESSION['userid'])) {
+    $userId = $_SESSION['userid'];
+    $hotelId = $_POST['hotelId'];
 
     // Sprawdzenie, czy ten hotel już jest w ulubionych tego użytkownika
     $checkSql = "SELECT * FROM ulubione_hotele WHERE usersId = ? AND hotelId = ?";
