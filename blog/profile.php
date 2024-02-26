@@ -6,8 +6,8 @@ require_once '../includes/dbh.inc.php';
 if (isset($_SESSION["userid"])) {
     $userid = $_SESSION["userid"];
 
-    // Sprawdzenie czy profil już istnieje
-    $profilQuery = "SELECT * FROM profil WHERE usersId = ?";
+    // Sprawdzenie czy informacje o profilu już istnieją
+    $profilQuery = "SELECT usersName, usersEmail, usersUid, profilOpis FROM users WHERE usersId = ?";
     $profilStmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($profilStmt, $profilQuery)) {
         echo "Błąd zapytania SQL";
@@ -18,30 +18,40 @@ if (isset($_SESSION["userid"])) {
     $profilResult = mysqli_stmt_get_result($profilStmt);
     $profil = mysqli_fetch_assoc($profilResult);
     
-    // Jeśli profil nie istnieje, utwórz nowy
+    // Sprawdzenie czy wynik zapytania nie jest pusty
     if (!$profil) {
-        $insertProfilQuery = "INSERT INTO profil (usersId) VALUES (?)";
-        $insertProfilStmt = mysqli_stmt_init($conn);
-        if (!mysqli_stmt_prepare($insertProfilStmt, $insertProfilQuery)) {
-            echo "Błąd przy tworzeniu nowego profilu";
-            exit();
-        }
-        mysqli_stmt_bind_param($insertProfilStmt, "i", $userid);
-        mysqli_stmt_execute($insertProfilStmt);
-        
-        // Ponownie pobierz profil po utworzeniu
-        mysqli_stmt_prepare($profilStmt, $profilQuery);
-        mysqli_stmt_bind_param($profilStmt, "i", $userid);
-        mysqli_stmt_execute($profilStmt);
-        $profilResult = mysqli_stmt_get_result($profilStmt);
-        $profil = mysqli_fetch_assoc($profilResult);
+        // Możliwe działania w przypadku braku profilu, np. przekierowanie na stronę błędu
+        echo "Nie znaleziono profilu.";
+        exit();
     }
-    
-    $profilOpis = $profil['profilOpis'] ?? "Tu pojawi się twój opis."; // Zaktualizowano o poprawne pobieranie opisu
 
-    // Pobranie ulubionych hoteli i atrakcji
-    $ulubioneHoteleIds = explode(',', $profil['profilUluhotel']);
-    $ulubioneAtrakcjeIds = explode(',', $profil['profilUluatra']);
+// Pobranie opisu profilu
+$profilOpis = $profil['profilOpis'] ?? "Tu pojawi się twój opis.";
+
+// Pobranie identyfikatorów ulubionych hoteli użytkownika
+$ulubioneHoteleQuery = "SELECT hotelId FROM ulubione_hotele WHERE userId = ?";
+$ulubioneHoteleStmt = mysqli_stmt_init($conn);
+if (!mysqli_stmt_prepare($ulubioneHoteleStmt, $ulubioneHoteleQuery)) {
+    echo "Błąd zapytania SQL dla ulubionych hoteli";
+    exit();
+}
+mysqli_stmt_bind_param($ulubioneHoteleStmt, "i", $userid);
+mysqli_stmt_execute($ulubioneHoteleStmt);
+$ulubioneHoteleResult = mysqli_stmt_get_result($ulubioneHoteleStmt);
+$ulubioneHoteleIds = mysqli_fetch_all($ulubioneHoteleResult, MYSQLI_ASSOC);
+
+// Pobranie identyfikatorów ulubionych atrakcji użytkownika
+$ulubioneAtrakcjeQuery = "SELECT atraId FROM ulubione_atrakcje WHERE userId = ?";
+$ulubioneAtrakcjeStmt = mysqli_stmt_init($conn);
+if (!mysqli_stmt_prepare($ulubioneAtrakcjeStmt, $ulubioneAtrakcjeQuery)) {
+    echo "Błąd zapytania SQL dla ulubionych atrakcji";
+    exit();
+}
+mysqli_stmt_bind_param($ulubioneAtrakcjeStmt, "i", $userid);
+mysqli_stmt_execute($ulubioneAtrakcjeStmt);
+$ulubioneAtrakcjeResult = mysqli_stmt_get_result($ulubioneAtrakcjeStmt);
+$ulubioneAtrakcjeIds = mysqli_fetch_all($ulubioneAtrakcjeResult, MYSQLI_ASSOC);
+
 ?>
 <main class="container mt-5">
     <!-- Zawartość profilu -->
