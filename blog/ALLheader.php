@@ -129,8 +129,9 @@
       <a class="nav-item nav-link link-body-emphasis" href="mapy.php">Mapy</a>
       <?php
         if (isset($_SESSION["useruid"])) {
+          echo "<a class='nav-item nav-link link-body-emphasis' href='Startwyjazdy.php'>Twoje Wyjazdy</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='grupy.php'>Grupy</a>";
-          echo "<a class='nav-item nav-link link-body-emphasis' href='Wyjazdy.php'>Wyjazdy</a>";
+          echo "<a class='nav-item nav-link link-body-emphasis' href='Wyjazdy.php'>Nowy Wyjazd</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='rezerwacjahotelu.php'>Rezerwacja Hotelu</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='planowanieatrakcji.php'>Planowanie atrakcji</a>";
           echo "<a class='nav-item nav-link link-body-emphasis' href='transport.php'>Transport</a>";
