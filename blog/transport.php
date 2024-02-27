@@ -2,62 +2,72 @@
 include_once 'ALLheader.php'; // Dołączenie nagłówka strony
 require_once '../includes/dbh.inc.php'; // Połączenie z bazą danych
 
-$transportSelected = isset($_POST['transportType']);
-$tripPlanned = false;
+// Sprawdzenie zalogowanego użytkownika
+if (isset($_SESSION['userid'])) {
+    $userId = $_SESSION['userid'];
 
-$tripSelected = isset($_POST['trip']) && $_POST['trip'] === "Wyjazd 01.03.2024";
+    // Pobranie dostępnych rodzajów transportu
+    $transportTypesQuery = "SELECT ID_Rodzaju_Transportu, Nazwa_transportu FROM rodzaje_transportu";
+    $transportTypesResult = $conn->query($transportTypesQuery);
+    $transportTypes = $transportTypesResult->fetch_all(MYSQLI_ASSOC);
 
-// Logika planowania transportu na podstawie wysłanego formularza
-if ($tripSelected && $transportSelected && isset($_POST['startPoint'], $_POST['endPoint'])) {
-    $tripPlanned = true;
-    $transportType = htmlspecialchars($_POST['transportType']);
-    $startPoint = htmlspecialchars($_POST['startPoint']);
-    $endPoint = htmlspecialchars($_POST['endPoint']);
+    // Pobranie wyjazdów powiązanych z grupami, do których należy użytkownik
+    $tripsQuery = "SELECT wyjazd.ID_Wyjazdu, wyjazd.Data_Startu FROM wyjazd
+                   JOIN uczestnik_grupy ON wyjazd.ID_Grupy = uczestnik_grupy.ID_Grupy
+                   WHERE uczestnik_grupy.usersId = ?";
+    $stmt = $conn->prepare($tripsQuery);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $tripsResult = $stmt->get_result();
+    $trips = $tripsResult->fetch_all(MYSQLI_ASSOC);
 }
 ?>
 
 <div class="container mt-5">
-    <h2>Wybierz wyjazd</h2>
-    <form action="" method="post">
+    <h2>Planowanie transportu</h2>
+    <form action="addTransportPlan.php" method="post">
         <div class="form-group">
-            <label for="trip">Wyjazd</label>
-            <select class="form-select" id="trip" name="trip">
-                <option value="Wyjazd 01.03.2024">Wyjazd 01.03.2024</option>
+            <label for="ID_Rodzaju_Transportu">Rodzaj transportu</label>
+            <select class="form-control" id="ID_Rodzaju_Transportu" name="ID_Rodzaju_Transportu" required>
+                <?php foreach ($transportTypes as $transportType): ?>
+                    <option value="<?= htmlspecialchars($transportType['ID_Rodzaju_Transportu']) ?>"><?= htmlspecialchars($transportType['Nazwa_transportu']) ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
-        <button type="submit" name="selectTrip" class="btn btn-primary mt-3">Wybierz wyjazd</button>
-    </form>
-
-    <?php if ($tripSelected): ?>
-        <h3>Zaplanuj transport</h3>
-        <form action="" method="post">
-            <input type="hidden" name="trip" value="Wyjazd 01.03.2024">
-            <div class="form-group">
-                <label for="transportType">Rodzaj transportu</label>
-                <select class="form-select" id="transportType" name="transportType">
-                    <option value="Autobus">Autobus</option>
-                    <option value="Pociąg">Pociąg</option>
-                    <option value="Samochód">Samochód</option>
-                    <option value="Rower">Rower</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="startPoint">Miejsce początkowe</label>
-                <input type="text" class="form-control" id="startPoint" name="startPoint" value="Hotel Leśna - Rzeczna 84" required>
-            </div>
-            <div class="form-group">
-                <label for="endPoint">Miejsce końcowe</label>
-                <input type="text" class="form-control" id="endPoint" name="endPoint" value="Katedra Wawelska - Malinowa 91" required>
-            </div>
-            <button type="submit" name="planTransport" class="btn btn-success mt-3">Zaplanuj transport</button>
-        </form>
-    <?php endif; ?>
-
-    <?php if ($tripPlanned): ?>
-        <div class="alert alert-success mt-3" role="alert">
-            Transport <?= $transportType ?> został zaplanowany z <?= $startPoint ?> do <?= $endPoint ?>.
+        <div class="form-group">
+            <label for="ID_Wyjazdu">Wyjazd</label>
+            <select class="form-control" id="ID_Wyjazdu" name="ID_Wyjazdu" required>
+                <?php foreach ($trips as $trip): ?>
+                    <option value="<?= htmlspecialchars($trip['ID_Wyjazdu']) ?>"><?= htmlspecialchars($trip['Data_Startu']) ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
-    <?php endif; ?>
+        <div class="form-group">
+            <label for="Pozycja_startowa">Pozycja startowa</label>
+            <input type="text" class="form-control" id="Pozycja_startowa" name="Pozycja_startowa" required>
+        </div>
+        <div class="form-group">
+            <label for="Pozycja_koncowa">Pozycja końcowa</label>
+            <input type="text" class="form-control" id="Pozycja_koncowa" name="Pozycja_koncowa" required>
+        </div>
+        <div class="form-group">
+            <label for="Data_startowa">Data startowa</label>
+            <input type="date" class="form-control" id="Data_startowa" name="Data_startowa" required>
+        </div>
+        <div class="form-group">
+            <label for="Data_koncowa">Data końcowa</label>
+            <input type="date" class="form-control" id="Data_koncowa" name="Data_koncowa" required>
+        </div>
+        <div class="form-group">
+            <label for="Kategoria_transportu">Kategoria transportu</label>
+            <input type="text" class="form-control" id="Kategoria_transportu" name="Kategoria_transportu" required>
+        </div>
+        <div class="form-group">
+            <label for="Cena">Cena</label>
+            <input type="number" class="form-control" id="Cena" name="Cena" required>
+        </div>
+        <button type="submit" name="addTransportPlan" class="btn btn-primary">Dodaj plan transportu</button>
+    </form>
 </div>
 
 <?php
