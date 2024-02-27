@@ -2,60 +2,60 @@
 include_once 'ALLheader.php'; // Dołączenie nagłówka strony
 require_once '../includes/dbh.inc.php'; // Połączenie z bazą danych
 
-$tripSelected = isset($_POST['trip']) && $_POST['trip'] === "Wyjazd 01.03.2024";
-$reservationCreated = false;
+// Sprawdzenie zalogowanego użytkownika
+if (isset($_SESSION['userid'])) {
+    $userId = $_SESSION['userid'];
 
-// Simulate reservation creation logic based on form submission
-if ($tripSelected && isset($_POST['hotelName'], $_POST['checkInDate'], $_POST['checkOutDate'], $_POST['guests'])) {
-    $reservationCreated = true;
-    $hotelName = htmlspecialchars($_POST['hotelName']);
-    $checkInDate = htmlspecialchars($_POST['checkInDate']);
-    $checkOutDate = htmlspecialchars($_POST['checkOutDate']);
-    $guests = intval($_POST['guests']);
+    // Pobranie dostępnych hoteli
+    $hotelsQuery = "SELECT hotelId, hotelNazwa FROM hotele";
+    $hotelsResult = $conn->query($hotelsQuery);
+    $hotels = $hotelsResult->fetch_all(MYSQLI_ASSOC);
+
+    // Pobranie wyjazdów powiązanych z grupami, do których należy użytkownik
+    $tripsQuery = "SELECT wyjazd.ID_Wyjazdu, wyjazd.Data_Startu FROM wyjazd
+                   JOIN uczestnik_grupy ON wyjazd.ID_Grupy = uczestnik_grupy.ID_Grupy
+                   WHERE uczestnik_grupy.usersId = ?";
+    $stmt = $conn->prepare($tripsQuery);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $tripsResult = $stmt->get_result();
+    $trips = $tripsResult->fetch_all(MYSQLI_ASSOC);
 }
 ?>
 
 <div class="container mt-5">
-    <h2>Dodaj rezerwację hotelową do wyjazdu</h2>
-    <form action="" method="post">
+    <h2>Dodaj rezerwację hotelu</h2>
+    <form action="addReservation.php" method="post">
         <div class="form-group">
-            <label for="trip">Wyjazd</label>
-            <select class="form-select" id="trip" name="trip">
-                <option value="Wyjazd 01.03.2024">Wyjazd 01.03.2024</option>
+            <label for="hotelId">Hotel</label>
+            <select class="form-control" id="hotelId" name="hotelId" required>
+                <?php foreach ($hotels as $hotel): ?>
+                    <option value="<?= htmlspecialchars($hotel['hotelId']) ?>"><?= htmlspecialchars($hotel['hotelNazwa']) ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
-        <button type="submit" name="selectTrip" class="btn btn-primary mt-3">Wybierz wyjazd</button>
-    </form>
-
-    <?php if ($tripSelected): ?>
-        <h3>Dodaj rezerwację hotelową</h3>
-        <form action="" method="post">
-            <input type="hidden" name="trip" value="Wyjazd 01.03.2024">
-            <div class="form-group">
-                <label for="hotelName">Nazwa hotelu</label>
-                <input type="text" class="form-control" id="hotelName" name="hotelName" required>
-            </div>
-            <div class="form-group">
-                <label for="checkInDate">Data zameldowania</label>
-                <input type="date" class="form-control" id="checkInDate" name="checkInDate" required>
-            </div>
-            <div class="form-group">
-                <label for="checkOutDate">Data wymeldowania</label>
-                <input type="date" class="form-control" id="checkOutDate" name="checkOutDate" required>
-            </div>
-            <div class="form-group">
-                <label for="guests">Liczba gości</label>
-                <input type="number" class="form-control" id="guests" name="guests" required min="1">
-            </div>
-            <button type="submit" name="createReservation" class="btn btn-success mt-3">Dodaj rezerwację</button>
-        </form>
-    <?php endif; ?>
-
-    <?php if ($reservationCreated): ?>
-        <div class="alert alert-success mt-3" role="alert">
-            Rezerwacja hotelu <?= $hotelName ?> została dodana! (Zameldowanie: <?= $checkInDate ?>, Wymeldowanie: <?= $checkOutDate ?>, Gości: <?= $guests ?>)
+        <div class="form-group">
+            <label for="ID_Wyjazdu">Wyjazd</label>
+            <select class="form-control" id="ID_Wyjazdu" name="ID_Wyjazdu" required>
+                <?php foreach ($trips as $trip): ?>
+                    <option value="<?= htmlspecialchars($trip['ID_Wyjazdu']) ?>"><?= htmlspecialchars($trip['Data_Startu']) ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
-    <?php endif; ?>
+        <div class="form-group">
+            <label for="Data_Start_rezerwacji">Data startu rezerwacji</label>
+            <input type="date" class="form-control" id="Data_Start_rezerwacji" name="Data_Start_rezerwacji" required>
+        </div>
+        <div class="form-group">
+            <label for="Data_koniec_rezerwacji">Data końca rezerwacji</label>
+            <input type="date" class="form-control" id="Data_koniec_rezerwacji" name="Data_koniec_rezerwacji" required>
+        </div>
+        <div class="form-group">
+            <label for="Opis_pokoju">Opis pokoju</label>
+            <textarea class="form-control" id="Opis_pokoju" name="Opis_pokoju" required></textarea>
+        </div>
+        <button type="submit" name="addReservation" class="btn btn-primary">Dodaj rezerwację</button>
+    </form>
 </div>
 
 <?php
