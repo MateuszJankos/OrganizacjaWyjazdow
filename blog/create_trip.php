@@ -1,31 +1,39 @@
 <?php
-session_start();
-// Sprawdź, czy wszystkie pola zostały wypełnione
-if (isset($_POST['destination'], $_POST['startDate'], $_POST['endDate'])) {
-    // Pobierz dane z formularza
-    $destination = $_POST['destination'];
+require_once '../includes/dbh.inc.php'; // Połączenie z bazą danych
+
+// Sprawdzanie, czy skrypt został wywołany przez wysłanie formularza
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['createTrip'])) {
+    // Przypisanie danych z formularza do zmiennych
+    $groupName = $_POST['groupName'];
     $startDate = $_POST['startDate'];
     $endDate = $_POST['endDate'];
 
-    // Połącz z bazą danych
-    require_once 'db_connection.php'; // Zmień na właściwą ścieżkę do pliku połączenia z bazą
-
-    // Przygotuj zapytanie do bazy danych
-    $sql = "INSERT INTO wyjazd (Data_Startu, Data_Konca, ID_Grupy) VALUES (?, ?, (SELECT ID_Grupy FROM grupa WHERE Nazwa_Grupy = ?))";
-    if ($stmt = $conn->prepare($sql)) {
-        // Pobierz ID grupy na podstawie nazwy grupy, w tym przypadku 'Narty'
-        $groupName = 'Narty';
-        // Bind parametrów do zapytania
-        $stmt->bind_param('sss', $startDate, $endDate, $groupName);
-        // Wykonaj zapytanie
-        if ($stmt->execute()) {
-            $tripCreated = true;
-        } else {
-            echo "Błąd przy tworzeniu wyjazdu: " . $stmt->error;
-        }
-        $stmt->close();
+    // Wyszukanie ID_Grupy na podstawie nazwy grupy
+    $groupSql = "SELECT ID_Grupy FROM grupa WHERE Nazwa_Grupy = ?";
+    if ($stmt = $conn->prepare($groupSql)) {
+        $stmt->bind_param("s", $groupName);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $groupRow = $result->fetch_assoc();
+        $groupId = $groupRow['ID_Grupy'];
     } else {
-        echo "Błąd: " . $conn->error;
+        // Obsługa błędów zapytania
+        die("Błąd zapytania do bazy danych: " . $conn->error);
     }
-    $conn->close();
+
+    // Dodanie wyjazdu do bazy danych
+    $tripSql = "INSERT INTO wyjazd (Data_Startu, Data_Konca, ID_Grupy) VALUES (?, ?, ?)";
+    if ($stmt = $conn->prepare($tripSql)) {
+        $stmt->bind_param("ssi", $startDate, $endDate, $groupId);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            echo "Nowy wyjazd został dodany.";
+        } else {
+            echo "Nie udało się dodać nowego wyjazdu.";
+        }
+    } else {
+        // Obsługa błędów zapytania
+        die("Błąd zapytania do bazy danych: " . $conn->error);
+    }
 }
